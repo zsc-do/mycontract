@@ -1,0 +1,60 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.it.mycontract.mapper.SysMenuMapper">
+
+    <select id="selectMenu" resultType="cn.it.mycontract.entity.SysMenu">
+    SELECT
+         m.id,
+         m.`name`,
+         m.parent_id,
+         m.href,
+         m.sort,
+         m.remarks,
+         m.del_flag
+    FROM
+        sys_user u
+        INNER JOIN sys_user_role ur ON u.id = ur.user_id
+        INNER JOIN sys_role_menu rm ON ur.role_id = rm.role_id
+        INNER JOIN sys_menu m ON rm.menu_id = m.id
+    WHERE
+        u.account = #{account}
+        and m.del_flag = '0'
+
+
+    </select>
+
+
+    <select id="selectMenuList" resultType="cn.it.mycontract.entity.SysMenu">
+        SELECT
+            sm1.*,
+            sm2.`name` AS parent_name
+        FROM
+            sys_menu sm1
+            LEFT JOIN sys_menu sm2 ON sm1.parent_id = sm2.id
+        WHERE sm1.del_flag = '0'
+
+    </select>
+
+
+
+    <select id="selectOneMenu" resultType="cn.it.mycontract.entity.SysMenu">
+        SELECT
+        sm1.*,
+        sm2.`name` AS parent_name
+        FROM
+        sys_menu sm1
+        LEFT JOIN sys_menu sm2 ON sm1.parent_id = sm2.id
+        WHERE sm1.del_flag = '0' AND sm1.id = #{id}
+
+    </select>
+
+
+
+
+
+
+
+
+</mapper>

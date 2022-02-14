@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.it.mycontract.mapper.SysUserMapper">
+
+
+    <resultMap id="sysUserResult" type="cn.it.mycontract.entity.SysUser">
+        <id column="user_id" property="id"/>
+        <result column="user_name" property="name"/>
+        <result column="user_account" property="account"/>
+        <result column="user_mobile" property="mobile"/>
+
+        <collection property="roleList" ofType="cn.it.mycontract.entity.SysRole">
+            <id column="role_id" property="id"/>
+            <result column="role_name" property="name"></result>
+        </collection>
+    </resultMap>
+
+    <select id="selectUserList" resultMap="sysUserResult">
+      SELECT
+	su.id AS user_id,
+	su.NAME AS user_name,
+	su.account AS user_account,
+	su.mobile AS user_mobile,
+	sr.id AS role_id,
+	sr.`name` AS role_name
+    FROM
+        sys_user su
+        LEFT JOIN sys_user_role sur ON su.id = sur.user_id
+        LEFT JOIN sys_role sr ON sur.role_id = sr.id
+    WHERE su.del_flag = "0"
+
+    </select>
+</mapper>

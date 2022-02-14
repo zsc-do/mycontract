@@ -1,0 +1,87 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"></link>
+    <script type="text/javascript" th:href="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery-3.5.1.min.js}"></script>
+</head>
+<body>
+
+
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        搜索
+    </div>
+    <div class="panel-body">
+        <form role="form" class="form-inline">
+            <div class="form-group">
+                <label for="name">名称</label>
+                <input type="text" class="form-control" id="name" placeholder="请输入名称">
+            </div>
+            <div class="form-group">
+                <label for="name">状态</label>
+                <select class="form-control">
+                    <option>上架</option>
+                    <option>下架</option>
+                </select>
+            </div>
+            <div class="form-group">
+                <button type="submit" class="btn btn-default">开始搜索</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<div class="panel panel-default">
+    <div class="panel-body">
+        <a th:href="@{/toAddRolePage}" class="btn btn btn-primary">新增</a>
+    </div>
+</div>
+
+
+<div class="table-responsive">
+
+
+    <table class="table table-striped ">
+        <thead>
+        <tr>
+            <th>编号</th>
+            <th>角色名</th>
+            <th>角色备注</th>
+            <th>角色关联的所有菜单</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr th:each="role : ${roles}">
+            <td th:text="${role.id}"></td>
+            <td th:text="${role.name}"></td>
+            <td th:text="${role.remarks}"></td>
+            <td>
+                <select class="form-control parent-menu-select" name="menuParentId">
+                    <option th:each="menus : ${role.menuList}" value="0">
+                        <div th:text="${menus.name}"></div>
+                    </option>
+                </select>
+            </td>
+            <td>
+                <div class="btn-group">
+                    <a th:href="@{/updateRolePage(id=${role.id})}" class="btn btn-default">修改</a>
+                    <a th:href="@{/deleteRole(id=${role.id})}" class="btn btn-danger">删除</a>
+                </div>
+            </td>
+
+        </tr>
+
+        </tbody>
+    </table>
+
+
+</div>
+
+</body>
+</html>

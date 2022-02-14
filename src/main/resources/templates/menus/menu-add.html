@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"></link>
+    <script type="text/javascript" th:href="@{/js/bootstrap.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/jquery-3.5.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap-select.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-select.min.css}"></link>
+
+
+
+</head>
+<body>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">新增界面</h3>
+    </div>
+    <div class="panel-body">
+        <form th:action="@{/addMenu}">
+            <div class="form-group">
+                <label>菜单名:</label>
+                <input type="text" name="menuName" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label>菜单路径:</label>
+                <input type="text" name="menuPath" class="form-control"/>
+            </div>
+            <div class="form-group">
+                <label>菜单备注:</label>
+                <input type="text" name="menuRemark" class="form-control"/>
+            </div>
+
+
+            <div class="form-group">
+                <label>选择父级菜单:</label>
+                <select class="form-control parent-menu-select" name="menuParentId">
+                    <option value="0">本菜单就是父级菜单</option>
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-default">提交</button>
+        </form>
+
+    </div>
+</div>
+
+
+<script th:inline="javascript">
+
+    // 通过Thymeleaf内置函数获取应用程序上下文路径
+    let basePath = [[${#httpServletRequest.getContextPath()}]];
+
+    let parentMenuSelect = document.getElementsByClassName('parent-menu-select')[0];
+
+
+    console.log(parentMenuSelect);
+    $.ajax({
+        type:"GET",
+        url:basePath + "/getAllParentMenu",
+        data:"",//请求参数
+        dataType:"JSON",
+        success:function(result){//回调函数
+
+
+
+            for (let i = 0; i < result.length; i++){
+                let optionNode = document.createElement('option');
+                optionNode.setAttribute("value",result[i].id);
+                optionNode.innerText = result[i].name;
+
+
+                console.log(optionNode);
+
+                parentMenuSelect.appendChild(optionNode);
+            }
+
+        }
+    })
+
+
+</script>
+
+</body>
+</html>

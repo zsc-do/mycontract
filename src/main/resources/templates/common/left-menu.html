@@ -1,0 +1,38 @@
+<!doctype html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport"
+          content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>Document</title>
+
+
+</head>
+<body>
+<!-- 左侧导航栏 -->
+<div class="col-sm-2 menu-list" th:fragment="left-menu">
+
+
+    <div class="container " style="margin-top: 0px;padding-left: 0px;">
+
+        <ul class="pre-scrollable">
+            <li th:each="menu : ${menus}" class="dropdown" >
+                <a th:text="${menu.name}" th:href="@{${menu.href}}" target="iframeoper" data-toggle="dropdown" > menus.name<i class="icon-arrow"></i></a>
+                <ul class="dropdown-menu">
+                    <li th:each="lowmenu : ${menu.children}">
+                        <a th:text="${lowmenu.name}" th:href="@{${lowmenu.href}}" target="iframeoper"></a>
+                    </li>
+                </ul>
+            </li>
+
+        </ul>
+    </div>
+    </div>
+</div>
+
+
+
+
+</body>
+</html>

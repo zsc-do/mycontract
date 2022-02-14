@@ -1,0 +1,80 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.0/js/bootstrap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+</head>
+
+<body>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">新增界面</h3>
+    </div>
+    <div class="panel-body">
+        <form th:action="@{/addArea}">
+            <div class="form-group">
+                <label>部门名称:</label>
+                <input type="text" name="areaName" class="form-control"/>
+            </div>
+
+            <div class="form-group">
+                <label>选择部门领导:</label>
+                <select class="form-control users-select" name="usersId">
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-default">提交</button>
+        </form>
+
+    </div>
+</div>
+
+
+<script th:inline="javascript">
+
+    // 通过Thymeleaf内置函数获取应用程序上下文路径
+    let basePath = [[${#httpServletRequest.getContextPath()}]];
+
+    let usersSelect = document.getElementsByClassName('users-select')[0];
+
+
+    $.ajax({
+        type:"GET",
+        url:basePath + "/getAllUsers",
+        data:"",//请求参数
+        dataType:"JSON",
+        success:function(result){//回调函数
+
+
+
+            for (let i = 0; i < result.length; i++){
+                let optionNode = document.createElement('option');
+                optionNode.setAttribute("value",result[i].id);
+                optionNode.innerText = result[i].name;
+
+
+
+                usersSelect.appendChild(optionNode);
+            }
+
+
+
+        }
+    });
+
+
+
+
+</script>
+
+
+
+</body>
+</html>
