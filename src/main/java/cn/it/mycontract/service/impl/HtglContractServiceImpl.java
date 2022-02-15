@@ -1,9 +1,11 @@
 package cn.it.mycontract.service.impl;
 
 import cn.it.mycontract.entity.HtglContract;
+import cn.it.mycontract.entity.SysArea;
 import cn.it.mycontract.mapper.HtglContractMapper;
 import cn.it.mycontract.service.HtglContractService;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 /**
@@ -17,4 +19,15 @@ import org.springframework.stereotype.Service;
 @Service
 public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, HtglContract> implements HtglContractService {
 
+
+
+    @Autowired
+    HtglContractMapper htglContractMapper;
+
+    @Override
+    public SysArea selectLeader(String account) {
+
+        SysArea sysArea = htglContractMapper.selectLeader(account);
+        return sysArea;
+    }
 }

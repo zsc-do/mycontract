@@ -63,8 +63,18 @@
 
 
             <div class="form-group">
-                <label>选择角色:</label>
-                <select class="selectpicker form-control roles-select" multiple name="rolesId">
+                <label>请选择下一步流程(部门领导审核):</label>
+                <select class=" form-control leader-select" name="leaderId">
+                </select>
+            </div>
+            <div class="form-group">
+                <label>请选择审签流程(收件部门):</label>
+                <select class="selectpicker form-control department-select" multiple name="departmentsId">
+                </select>
+            </div>
+            <div class="form-group">
+                <label>请选择局领导审批流程(请选择部门分管领导):</label>
+                <select class="form-control boss-select"  name="bossId">
                 </select>
             </div>
 
@@ -80,15 +90,44 @@
     // 通过Thymeleaf内置函数获取应用程序上下文路径
     let basePath = [[${#httpServletRequest.getContextPath()}]];
 
-    let rolesSelect = document.getElementsByClassName('roles-select')[0];
+    let leaderSelect = document.getElementsByClassName('leader-select')[0];
+
+    let departmentSelect = document.getElementsByClassName('department-select')[0];
+
+    let bossSelect = document.getElementsByClassName('boss-select')[0];
 
 
     $.ajax({
         type:"GET",
-        url:basePath + "/getAllRoles",
+        url:basePath + "/getAllLeader",
         data:"",//请求参数
         dataType:"JSON",
-        success:function(result){//回调函数
+        success:function(result){
+
+
+
+            for (let i = 0; i < result.length; i++){
+                let optionNode = document.createElement('option');
+                optionNode.setAttribute("value",result[i].id);
+                optionNode.innerText = result[i].leaderName;
+
+
+                leaderSelect.appendChild(optionNode);
+            }
+
+
+
+        }
+    });
+
+
+
+    $.ajax({
+        type:"GET",
+        url:basePath + "/getRecieveArea",
+        data:"",//请求参数
+        dataType:"JSON",
+        success:function(result){
 
 
 
@@ -98,13 +137,35 @@
                 optionNode.innerText = result[i].name;
 
 
-                console.log(optionNode);
-
-                rolesSelect.appendChild(optionNode);
+                departmentSelect.appendChild(optionNode);
             }
 
 
             $('.selectpicker').selectpicker('refresh');
+
+        }
+    });
+
+
+    $.ajax({
+        type:"GET",
+        url:basePath + "/getBoss",
+        data:"",//请求参数
+        dataType:"JSON",
+        success:function(result){
+
+
+
+            for (let i = 0; i < result.length; i++){
+                let optionNode = document.createElement('option');
+                optionNode.setAttribute("value",result[i].id);
+                optionNode.innerText = result[i].name;
+
+
+                bossSelect.appendChild(optionNode);
+            }
+
+
 
         }
     });

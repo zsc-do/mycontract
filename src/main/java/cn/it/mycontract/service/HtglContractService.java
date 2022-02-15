@@ -1,6 +1,7 @@
 package cn.it.mycontract.service;
 
 import cn.it.mycontract.entity.HtglContract;
+import cn.it.mycontract.entity.SysArea;
 import com.baomidou.mybatisplus.service.IService;
 
 /**
@@ -13,4 +14,5 @@ import com.baomidou.mybatisplus.service.IService;
  */
 public interface HtglContractService extends IService<HtglContract> {
 
+    SysArea selectLeader(String account);
 }

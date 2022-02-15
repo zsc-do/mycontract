@@ -28,6 +28,7 @@ public class SysArea implements Serializable {
 
     private Integer leaderId;
 
+
     private String delFlag;
 
 

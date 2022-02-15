@@ -5,6 +5,7 @@ import cn.it.mycontract.entity.SysMenu;
 import cn.it.mycontract.entity.SysUser;
 import cn.it.mycontract.service.SysMenuService;
 import cn.it.mycontract.service.SysUserService;
+import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.apache.shiro.SecurityUtils;
 import org.apache.shiro.authc.IncorrectCredentialsException;
 import org.apache.shiro.authc.UnknownAccountException;
@@ -51,11 +52,16 @@ public class LoginController {
     @RequestMapping("/login")
     public String login(@RequestParam("account") String account,
                         @RequestParam("password") String password,
-                        Model model){
+                        Model model,
+                        HttpServletRequest request){
         //获取主体对象
         Subject subject = SecurityUtils.getSubject();
         try {
             subject.login(new UsernamePasswordToken(account,password));
+
+            HttpSession session = request.getSession();
+            SysUser sysUser = sysUserService.selectUserList().get(0);
+            session.setAttribute("sysUser", sysUser);
 
 
             List<SysMenu> menus = sysMenuService.getMenu(account);

@@ -21,4 +21,6 @@ public interface SysUserService extends IService<SysUser> {
     void addUser(SysUser sysUser, String[] rolesIdStr);
 
     void updateUser(SysUser sysUser, String[] rolesIdStr);
+
+    List<SysUser> selectBoss();
 }

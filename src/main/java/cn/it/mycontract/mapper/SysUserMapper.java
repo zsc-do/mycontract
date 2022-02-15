@@ -16,4 +16,7 @@ import java.util.List;
 public interface SysUserMapper extends BaseMapper<SysUser> {
 
     List<SysUser> selectUserList();
+
+    List<SysUser> selectBoss();
+
 }

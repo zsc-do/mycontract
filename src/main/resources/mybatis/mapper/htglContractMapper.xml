@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="cn.it.mycontract.mapper.HtglContractMapper">
+
+
+
+    <!--
+        查询用户部门的上级领导与所在部门
+    -->
+    <select id="selectLeader" resultType="cn.it.mycontract.entity.SysArea">
+
+        SELECT
+        sa1.id,
+        sa1.`name`,
+        su1.id as leader_id,
+        su1.`name` as leader_name
+    FROM
+	sys_area sa1
+	LEFT JOIN sys_user su1 ON sa1.leader_id = su1.id
+WHERE
+	sa1.id = ( SELECT sa.id
+	FROM sys_user su
+	LEFT JOIN sys_area sa
+	ON su.area_id = sa.id
+	WHERE su.account = #{account} )
+    </select>
+</mapper>

@@ -37,6 +37,8 @@ public class SysUser implements Serializable {
 
     private String delFlag;
 
+    private Integer areaId;
+
     @TableField(exist = false)
     private List<SysRole> roleList;
 
@@ -101,6 +103,14 @@ public class SysUser implements Serializable {
         this.account = account;
     }
 
+
+    public Integer getAreaId() {
+        return areaId;
+    }
+
+    public void setAreaId(Integer areaId) {
+        this.areaId = areaId;
+    }
 
     public List<SysRole> getRoleList() {
         return roleList;

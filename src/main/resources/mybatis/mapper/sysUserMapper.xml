@@ -32,4 +32,14 @@
     WHERE su.del_flag = "0"
 
     </select>
+
+
+    <select id="selectBoss" resultType="cn.it.mycontract.entity.SysUser">
+        SELECT su.id,su.name
+        from sys_user su
+        LEFT JOIN sys_area sa
+        on su.area_id = sa.id
+        where sa.`name` = '局领导'
+
+    </select>
 </mapper>
