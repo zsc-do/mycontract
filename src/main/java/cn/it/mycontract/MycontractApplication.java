@@ -8,8 +8,10 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 @MapperScan("cn.it.mycontract.mapper")
 public class MycontractApplication {
 
+
 	public static void main(String[] args) {
 		SpringApplication.run(MycontractApplication.class, args);
+
 	}
 
 }

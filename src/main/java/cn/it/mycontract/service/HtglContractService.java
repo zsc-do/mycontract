@@ -15,4 +15,9 @@ import com.baomidou.mybatisplus.service.IService;
 public interface HtglContractService extends IService<HtglContract> {
 
     SysArea selectLeader(String account);
+
+    void saveHtqc(HtglContract htglContract,
+                  String partenerjia, String parteneryi,
+                  String leaderId,String departmentsId,String bossId);
+
 }

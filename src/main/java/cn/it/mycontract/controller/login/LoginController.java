@@ -60,7 +60,7 @@ public class LoginController {
             subject.login(new UsernamePasswordToken(account,password));
 
             HttpSession session = request.getSession();
-            SysUser sysUser = sysUserService.selectUserList().get(0);
+            SysUser sysUser = sysUserService.selectLoginUser(account);
             session.setAttribute("sysUser", sysUser);
 
 

@@ -25,39 +25,39 @@
             </div>
             <div class="form-group">
                 <label>需求单位:</label>
-                <input type="text" name="userName" class="form-control"/>
+                <input type="text" name="sponsorName" class="form-control"/>
             </div>
             <div class="form-group">
                 <label>需求单位经办人:</label>
-                <input type="text" name="userPassword" class="form-control"/>
+                <input type="text" name="operatorName" class="form-control"/>
             </div>
             <div class="form-group">
                 <label>起草日期:</label>
-                <input type="text" name="userMobile" class="form-control"/>
+                <input th:value="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}" type="text" name="draftTime" class="form-control"/>
             </div>
             <div class="form-group">
                 <label>财务预算单号:</label>
-                <input type="text" name="userMobile" class="form-control"/>
+                <input type="text" name="budgetCode" class="form-control"/>
             </div>
             <div class="form-group">
                 <label>合同金额:</label>
-                <input type="text" name="userMobile" class="form-control"/>
+                <input type="text" name="contractMoney" class="form-control"/>
             </div>
             <div class="form-group">
                 <label>合同授权代表:</label>
-                <input type="text" name="userMobile" class="form-control"/>
+                <input type="text" name="authorization" class="form-control"/>
             </div>
             <div class="form-group">
                 <label>份数:</label>
-                <input type="text" name="userMobile" class="form-control"/>
+                <input type="text" name="contractCnt" class="form-control"/>
             </div>
             <div class="form-group">
                 <label>甲方:</label>
-                <input type="text" name="userMobile" class="form-control"/>
+                <input type="text" name="partenerjia" class="form-control"/>
             </div>
             <div class="form-group">
                 <label>乙方:</label>
-                <input type="text" name="userMobile" class="form-control"/>
+                <input type="text" name="parteneryi" class="form-control"/>
             </div>
 
 
@@ -108,7 +108,7 @@
 
             for (let i = 0; i < result.length; i++){
                 let optionNode = document.createElement('option');
-                optionNode.setAttribute("value",result[i].id);
+                optionNode.setAttribute("value",result[i].leaderId);
                 optionNode.innerText = result[i].leaderName;
 
 

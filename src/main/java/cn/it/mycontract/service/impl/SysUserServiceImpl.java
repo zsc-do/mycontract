@@ -101,4 +101,11 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
         List<SysUser> sysUsers = sysUserMapper.selectBoss();
         return sysUsers;
     }
+
+    @Override
+    public SysUser selectLoginUser(String account) {
+
+        SysUser sysUser = sysUserMapper.selectLoginUser(account);
+        return sysUser;
+    }
 }

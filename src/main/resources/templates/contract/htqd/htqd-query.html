@@ -38,7 +38,7 @@
 
 <div class="panel panel-default">
     <div class="panel-body">
-        <a th:href="@{/toHtqcAdd}" class="btn btn btn-primary">起草合同</a>
+        <a th:href="@{/toHtqdAdd}" class="btn btn btn-primary">签订合同</a>
     </div>
 </div>
 
@@ -67,9 +67,8 @@
             <td th:text="${contract.operatorName}"></td>
             <td th:text="${#dates.format(contract.draftTime, 'yyyy-MM-dd')}"></td>
             <td>
-                <div th:if="${contract.flowStatus}==0" class="btn-group">
-                    <a th:href="@{/ToReDraftPage(cid=${contract.id})}" class="btn btn-danger">重新起草(被退回合同)</a>
-                    <!--<a th:href="@{/deleteUser(id=${user.id})}" class="btn btn-danger">删除</a>-->
+                <div class="btn-group">
+                    <a th:href="@{/signContract(id=${contract.id})}" class="btn btn-danger">签订</a>
                 </div>
             </td>
 

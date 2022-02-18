@@ -2,6 +2,7 @@ package cn.it.mycontract.mapper;
 
 import cn.it.mycontract.entity.SysUser;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
 
@@ -19,4 +20,5 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
     List<SysUser> selectBoss();
 
+    SysUser selectLoginUser(@Param("account") String account);
 }

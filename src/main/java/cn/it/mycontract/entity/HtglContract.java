@@ -86,6 +86,18 @@ public class HtglContract implements Serializable {
      */
     private Date approveTime;
 
+
+    private String flowStatus;
+
+
+    public String getFlowStatus() {
+        return flowStatus;
+    }
+
+    public void setFlowStatus(String flowStatus) {
+        this.flowStatus = flowStatus;
+    }
+
     public Integer getId() {
         return id;
     }

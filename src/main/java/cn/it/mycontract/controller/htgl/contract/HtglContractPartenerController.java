@@ -1,4 +1,4 @@
-package cn.it.mycontract.controller;
+package cn.it.mycontract.controller.htgl.contract;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;
