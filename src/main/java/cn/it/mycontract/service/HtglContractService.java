@@ -17,7 +17,7 @@ public interface HtglContractService extends IService<HtglContract> {
     SysArea selectLeader(String account);
 
     void saveHtqc(HtglContract htglContract,
-                  String partenerjia, String parteneryi,
+                  String partenerName,
                   String leaderId,String departmentsId,String bossId);
 
 }

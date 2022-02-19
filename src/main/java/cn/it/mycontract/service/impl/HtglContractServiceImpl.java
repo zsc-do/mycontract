@@ -52,27 +52,29 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
     @Override
     @Transactional
     public void saveHtqc(HtglContract htglContract,
-                         String partenerjia, String parteneryi,
+                         String partenerName,
                          String leaderId,String departmentsId,String bossId) {
 
         htglContractMapper.insert(htglContract);
 
-        HtglContractPartener htglContractPartenerjia = new HtglContractPartener();
-        HtglContractPartener htglContractParteneryi = new HtglContractPartener();
+
+        String[] partenerNameSplit = partenerName.split(",");
+
+        String[] s = {"甲","乙","丙","丁","戊","己","庚","辛","壬","癸"};
+        Integer cur = 0;
+
+        for (String pName : partenerNameSplit){
+            HtglContractPartener htglContractPartener = new HtglContractPartener();
+            htglContractPartener.setContractId(htglContract.getId());
+            htglContractPartener.setPartenerName(pName);
+            htglContractPartener.setPartenerType(s[cur]);
+
+            htglContractPartenerMapper.insert(htglContractPartener);
+
+            cur ++;
+        }
 
 
-        htglContractPartenerjia.setContractId(htglContract.getId());
-        htglContractPartenerjia.setPartenerType("甲方");
-        htglContractPartenerjia.setPartenerName(partenerjia);
-
-        htglContractParteneryi.setContractId(htglContract.getId());
-        htglContractParteneryi.setPartenerType("乙方");
-        htglContractParteneryi.setPartenerName(parteneryi);
-
-
-
-        htglContractPartenerMapper.insert(htglContractPartenerjia);
-        htglContractPartenerMapper.insert(htglContractParteneryi);
 
         HtglProcessRecord processRecord1 = new HtglProcessRecord();
         processRecord1.setContractId(htglContract.getId());

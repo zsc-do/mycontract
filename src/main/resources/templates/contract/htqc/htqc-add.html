@@ -4,11 +4,15 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
-    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.js"></script>
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.0/js/bootstrap.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/jquery-3.5.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-select.min.css}">
+    <script type="text/javascript" th:src="@{/js/bootstrap-select.js}"></script>
+
+
+
 </head>
 
 <body>
@@ -18,7 +22,7 @@
         <h3 class="panel-title">合同起草</h3>
     </div>
     <div class="panel-body">
-        <form th:action="@{/addContract}">
+        <form name="htqcForm" th:action="@{/addContract}">
             <div class="form-group">
                 <label>合同名称:</label>
                 <input type="text" name="contractName" class="form-control"/>
@@ -33,7 +37,7 @@
             </div>
             <div class="form-group">
                 <label>起草日期:</label>
-                <input th:value="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}" type="text" name="draftTime" class="form-control"/>
+                <input th:value="${#dates.format(new java.util.Date().getTime(), 'yyyy-MM-dd')}" readonly type="text" name="draftTime" class="form-control"/>
             </div>
             <div class="form-group">
                 <label>财务预算单号:</label>
@@ -51,14 +55,18 @@
                 <label>份数:</label>
                 <input type="text" name="contractCnt" class="form-control"/>
             </div>
-            <div class="form-group">
-                <label>甲方:</label>
-                <input type="text" name="partenerjia" class="form-control"/>
+            <div id="partenerGroup">
+                <div class="form-group">
+                    <label>甲方:</label>
+                    <input type="text" name="partenerName" class="partnerType form-control"/>
+                </div>
             </div>
-            <div class="form-group">
-                <label>乙方:</label>
-                <input type="text" name="parteneryi" class="form-control"/>
+
+
+            <div class="btn-group">
+                <a onclick="addPartner()" class="btn btn-primary">添加</a>
             </div>
+
 
 
 
@@ -78,7 +86,7 @@
                 </select>
             </div>
 
-            <button type="submit" class="btn btn-default">提交</button>
+            <button type="submit" id="submitBtn" class="btn btn-default">提交</button>
         </form>
 
     </div>
@@ -86,6 +94,20 @@
 
 
 <script th:inline="javascript">
+
+    function addPartner(){
+        let s = ["甲","乙","丙","丁","戊","己","庚","辛","壬","癸"];
+        let size = document.getElementsByClassName("partnerType").length;
+        if(size<10){
+            $("#partenerGroup").append("<div class=\"form-group\">\n" +
+                "                    <label>" +s[size] + "方:</label>\n" +
+                "                    <input type=\"text\" name=\"partenerName\" class=\"partnerType form-control\"/>\n" +
+                "                </div>");
+
+        }
+    }
+
+
 
     // 通过Thymeleaf内置函数获取应用程序上下文路径
     let basePath = [[${#httpServletRequest.getContextPath()}]];
@@ -171,9 +193,10 @@
     });
 
 
-
-
 </script>
+
+<script type="text/javascript" th:src="@{/js/validateqc-form.js}"></script>
+
 
 
 

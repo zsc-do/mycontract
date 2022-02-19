@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+
+    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
+    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.js"></script>
+    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.0/js/bootstrap.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+</head>
+
+<body>
+
+<div class="panel panel-default">
+    <div class="panel-heading">
+        <h3 class="panel-title">修改合同</h3>
+    </div>
+        <div class="panel-body">
+            <form th:action="@{/addContract}">
+                <fieldset disabled>
+                    <div class="form-group">
+                        <label>合同名称:</label>
+                        <input th:value="${contract.name}" type="text" name="contractName" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label>需求单位:</label>
+                        <input th:value="${contract.sponsorName}" type="text" name="sponsorName" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label>需求单位经办人:</label>
+                        <input th:value="${contract.operatorName}"  type="text" name="operatorName" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label>起草日期:</label>
+                        <input th:value="${#dates.format(contract.draftTime, 'yyyy-MM-dd')}" type="text" name="draftTime" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label>财务预算单号:</label>
+                        <input th:value="${contract.budgetCode}" type="text" name="budgetCode" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label>合同金额:</label>
+                        <input th:value="${contract.contractMoney}" type="text" name="contractMoney" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label>合同授权代表:</label>
+                        <input th:value="${contract.authorization}" type="text" name="authorization" class="form-control"/>
+                    </div>
+                    <div class="form-group">
+                        <label>份数:</label>
+                        <input  th:value="${contract.contractCnt}" type="text" name="contractCnt" class="form-control"/>
+                    </div>
+
+
+                    <div id="partenerGroup">
+                        <div th:each="contractPartener : ${contractParteners}" class="form-group">
+                            <label th:text="${contractPartener.partenerType}"></label>
+                            <input th:value="${contractPartener.partenerName}" type="text" name="partenerName" class="partnerType form-control"/>
+                        </div>
+                    </div>
+
+
+
+                    <div class="form-group">
+                        <label>请选择下一步流程(部门领导审核):</label>
+                        <select class=" form-control leader-select" name="leaderId">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>请选择审签流程(收件部门):</label>
+                        <select class="selectpicker form-control department-select" multiple name="departmentsId">
+                        </select>
+                    </div>
+                    <div class="form-group">
+                        <label>请选择局领导审批流程(请选择部门分管领导):</label>
+                        <select class="form-control boss-select"  name="bossId">
+                        </select>
+                    </div>
+                </fieldset>
+            </form>
+
+        </div>
+    </fieldset>
+
+
+</div>
+</div>
+
+
+<script th:inline="javascript">
+
+
+
+    // 通过Thymeleaf内置函数获取应用程序上下文路径
+    let basePath = [[${#httpServletRequest.getContextPath()}]];
+
+    let leaderSelect = document.getElementsByClassName('leader-select')[0];
+
+    let departmentSelect = document.getElementsByClassName('department-select')[0];
+
+    let bossSelect = document.getElementsByClassName('boss-select')[0];
+
+
+    $.ajax({
+        type:"GET",
+        url:basePath + "/getAllLeader",
+        data:"",//请求参数
+        dataType:"JSON",
+        success:function(result){
+
+
+
+            for (let i = 0; i < result.length; i++){
+                let optionNode = document.createElement('option');
+                optionNode.setAttribute("value",result[i].leaderId);
+                optionNode.innerText = result[i].leaderName;
+
+
+                leaderSelect.appendChild(optionNode);
+            }
+        }
+    });
+
+
+
+    $.ajax({
+        type:"GET",
+        url:basePath + "/getRecieveArea",
+        data:"",//请求参数
+        dataType:"JSON",
+        success:function(result){
+
+
+
+            for (let i = 0; i < result.length; i++){
+                let optionNode = document.createElement('option');
+                optionNode.setAttribute("value",result[i].id);
+                optionNode.innerText = result[i].name;
+
+
+                departmentSelect.appendChild(optionNode);
+            }
+
+
+            $('.selectpicker').selectpicker('refresh');
+
+            //选中所有选项
+            $('.selectpicker').selectpicker( 'selectAll' );
+        }
+    });
+
+
+    $.ajax({
+        type:"GET",
+        url:basePath + "/getBoss",
+        data:"",//请求参数
+        dataType:"JSON",
+        success:function(result){
+
+
+
+            for (let i = 0; i < result.length; i++){
+                let optionNode = document.createElement('option');
+                optionNode.setAttribute("value",result[i].id);
+                optionNode.innerText = result[i].name;
+
+
+                bossSelect.appendChild(optionNode);
+            }
+        }
+    });
+
+
+
+
+</script>
+
+
+
+</body>
+</html>

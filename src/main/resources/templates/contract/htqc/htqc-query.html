@@ -68,8 +68,10 @@
             <td th:text="${#dates.format(contract.draftTime, 'yyyy-MM-dd')}"></td>
             <td>
                 <div th:if="${contract.flowStatus}==0" class="btn-group">
-                    <a th:href="@{/ToReDraftPage(cid=${contract.id})}" class="btn btn-danger">重新起草(被退回合同)</a>
-                    <!--<a th:href="@{/deleteUser(id=${user.id})}" class="btn btn-danger">删除</a>-->
+                    <a th:href="@{/toHtqcEdit(cid=${contract.id})}" class="btn btn-danger">进行修改(被退回合同)</a>
+                </div>
+                <div th:if="${contract.flowStatus}!=0" class="btn-group">
+                    <a th:href="@{/toHtqcDetail(cid=${contract.id})}" class="btn btn-primary">查询</a>
                 </div>
             </td>
 
