@@ -56,8 +56,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="area : ${areas}">
-            <td th:text="${area.id}"></td>
+        <tr th:each="area,index : ${areas}">
+            <td th:text="${index.count}"></td>
             <td th:text="${area.name}"></td>
             <td th:text="${area.leaderName}"></td>
             <td>

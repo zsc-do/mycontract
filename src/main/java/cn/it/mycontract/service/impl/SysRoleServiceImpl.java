@@ -43,7 +43,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     @Transactional
-    public void addRole(SysRole sysRole, String[] menusId) {
+    public void addRole(SysRole sysRole, List<String> menusId) {
         sysRoleMapper.insert(sysRole);
 
         for (String menuId : menusId){
@@ -58,7 +58,7 @@ public class SysRoleServiceImpl extends ServiceImpl<SysRoleMapper, SysRole> impl
 
     @Override
     @Transactional
-    public void updateRole(SysRole sysRole, String[] menusId) {
+    public void updateRole(SysRole sysRole, List<String> menusId) {
         sysRoleMapper.update(sysRole,new EntityWrapper<SysRole>()
                 .eq("id",sysRole.getId()));
 

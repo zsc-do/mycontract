@@ -4,6 +4,7 @@ import cn.it.mycontract.entity.SysMenu;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,4 +23,5 @@ public interface SysMenuMapper extends BaseMapper<SysMenu> {
 
     SysMenu selectOneMenu(@Param("id") String id);
 
+    ArrayList<String> selectParentMenuId(@Param("sonMenus") List<String> sonMenus);
 }

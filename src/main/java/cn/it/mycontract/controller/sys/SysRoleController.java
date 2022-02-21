@@ -3,9 +3,11 @@ package cn.it.mycontract.controller.sys;
 
 import cn.it.mycontract.entity.SysMenu;
 import cn.it.mycontract.entity.SysRole;
+import cn.it.mycontract.service.SysMenuService;
 import cn.it.mycontract.service.SysRoleService;
 import cn.it.mycontract.service.SysUserService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import org.apache.commons.beanutils.ConvertUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -14,6 +16,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 /**
@@ -29,6 +33,9 @@ public class SysRoleController {
 
     @Autowired
     SysRoleService sysRoleService;
+
+    @Autowired
+    SysMenuService sysMenuService;
 
     @RequestMapping("/queryRolePageList")
     public String queryRolePageList(Model model){
@@ -53,10 +60,14 @@ public class SysRoleController {
     @RequestMapping("/addRole")
     public String addRole(@RequestParam("roleName") String roleName,
                           @RequestParam("roleRemarks") String roleRemarks,
-                          @RequestParam("menuParentId") String menuParentId){
+                          @RequestParam("menuIds") String menuIds){
 
 
-        String[] menusId = menuParentId.split(",");
+        List<String> menusList = new ArrayList<String>(Arrays.asList(menuIds.split(",")));
+        List<String> partentMenuIds = sysMenuService.selectParentMenuId(menusList);
+
+
+        menusList.addAll(partentMenuIds);
 
 
         SysRole sysRole = new SysRole();
@@ -65,7 +76,7 @@ public class SysRoleController {
         sysRole.setRemarks(roleRemarks);
 
 
-        sysRoleService.addRole(sysRole,menusId);
+        sysRoleService.addRole(sysRole,menusList);
 
 
 
@@ -108,10 +119,15 @@ public class SysRoleController {
     public String updateRole(@RequestParam("roleId") String roleId,
                              @RequestParam("roleName") String roleName,
                              @RequestParam("roleRemarks") String roleRemarks,
-                             @RequestParam("menuParentId") String menuParentId){
+                             @RequestParam("menuIds") String menuIds){
 
 
-        String[] menusId = menuParentId.split(",");
+        List<String> menusList = new ArrayList<String>(Arrays.asList(menuIds.split(",")));
+        List<String> partentMenuIds = sysMenuService.selectParentMenuId(menusList);
+
+
+        menusList.addAll(partentMenuIds);
+
 
 
         SysRole sysRole = new SysRole();
@@ -120,7 +136,7 @@ public class SysRoleController {
         sysRole.setRemarks(roleRemarks);
 
 
-        sysRoleService.updateRole(sysRole,menusId);
+        sysRoleService.updateRole(sysRole,menusList);
 
 
 

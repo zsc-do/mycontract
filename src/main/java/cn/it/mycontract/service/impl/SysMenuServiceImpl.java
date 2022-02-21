@@ -8,6 +8,7 @@ import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -50,6 +51,15 @@ public class SysMenuServiceImpl extends ServiceImpl<SysMenuMapper, SysMenu> impl
 
         SysMenu sysMenu = sysMenuMapper.selectOneMenu(id);
         return sysMenu;
+    }
+
+    @Override
+    public ArrayList<String> selectParentMenuId(List<String> sonMenus) {
+
+        ArrayList<String> partentMenuIds = sysMenuMapper.selectParentMenuId(sonMenus);
+
+        return partentMenuIds;
+
     }
 
 

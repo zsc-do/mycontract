@@ -9,6 +9,8 @@ import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
+import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -16,6 +18,9 @@ import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
+import cn.it.mycontract.vo.htglContractVo;
+
+import javax.validation.Valid;
 
 @Controller
 public class HtqcController {
@@ -29,12 +34,8 @@ public class HtqcController {
 
 
 
-
     /*
-    * 保存合同
-    */
-    @RequestMapping("/addContract")
-    public String addContract(@RequestParam("contractName") String contractName,
+    * @RequestParam("contractName") String contractName,
                               @RequestParam("sponsorName") String sponsorName,
                               @RequestParam("operatorName") String operatorName,
                               @RequestParam("draftTime") String draftTime,
@@ -46,31 +47,49 @@ public class HtqcController {
                               @RequestParam("leaderId") String leaderId,
                               @RequestParam("departmentsId") String departmentsId,
                               @RequestParam("bossId") String bossId
-    ){
+    *
+    * */
 
+    /*
+    * 保存合同
+    */
+    @RequestMapping("/addContract")
+    public String addContract(@Valid htglContractVo htglContractVo,BindingResult bindingResult){
+
+        if (bindingResult.hasErrors()){
+            System.out.println("有校验错误");
+
+            for (FieldError error : bindingResult.getFieldErrors()){
+                System.out.println(error.getDefaultMessage());//错误信息
+                System.out.println(error.getField());//错误的字段名
+            }
+            return "redirect:/queryHtqcPageList";
+        }
 
 
         HtglContract htglContract = new HtglContract();
-        htglContract.setName(contractName);
-        htglContract.setSponsorName(sponsorName);
-        htglContract.setOperatorName(operatorName);
-        htglContract.setBudgetCode(budgetCode);
-        htglContract.setContractMoney(contractMoney);
-        htglContract.setAuthorization(authorization);
-        htglContract.setContractCnt(contractCnt);
+        htglContract.setName(htglContractVo.getContractName());
+        htglContract.setSponsorName(htglContractVo.getSponsorName());
+        htglContract.setOperatorName(htglContract.getOperatorName());
+        htglContract.setBudgetCode(htglContractVo.getBudgetCode());
+        htglContract.setContractMoney(htglContractVo.getContractMoney());
+        htglContract.setAuthorization(htglContractVo.getAuthorization());
+        htglContract.setContractCnt(htglContractVo.getContractCnt());
 
 
         SimpleDateFormat sdf1 = new SimpleDateFormat("yyyy-MM-dd");
         Date contractDraftTime = null;
 
         try {
-            contractDraftTime = sdf1.parse(draftTime);
+            contractDraftTime = sdf1.parse(htglContractVo.getDraftTime());
         } catch (ParseException e) {
             e.printStackTrace();
         }
         htglContract.setDraftTime(contractDraftTime);
 
-        htglContractService.saveHtqc(htglContract,partenerName,leaderId,departmentsId,bossId);
+        htglContractService.saveHtqc(htglContract,htglContractVo.getPartenerName(),
+                htglContractVo.getLeaderId(),htglContractVo.getDepartmentsId(),
+                htglContractVo.getBossId());
 
 
 

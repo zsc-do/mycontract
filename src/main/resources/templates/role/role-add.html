@@ -11,6 +11,7 @@
     <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
 </head>
 
+
 <body>
 
 <div class="panel panel-default">
@@ -30,8 +31,10 @@
 
 
             <div class="form-group">
-                <label>选择父级菜单:</label>
-                <select class="selectpicker form-control parent-menu-select" multiple name="menuParentId">
+                <label>选择菜单:</label>
+
+                <select  class="form-control selectpicker menu-select" name="menuIds"  multiple >
+
                 </select>
             </div>
 
@@ -47,13 +50,12 @@
     // 通过Thymeleaf内置函数获取应用程序上下文路径
     let basePath = [[${#httpServletRequest.getContextPath()}]];
 
-    let parentMenuSelect = document.getElementsByClassName('parent-menu-select')[0];
+    let menuSelect = document.getElementsByClassName('menu-select')[0];
 
 
-    console.log(parentMenuSelect);
     $.ajax({
         type:"GET",
-        url:basePath + "/getAllParentMenu",
+        url:basePath + "/getMenuTree",
         data:"",//请求参数
         dataType:"JSON",
         success:function(result){//回调函数
@@ -61,14 +63,22 @@
 
 
             for (let i = 0; i < result.length; i++){
-                let optionNode = document.createElement('option');
-                optionNode.setAttribute("value",result[i].id);
-                optionNode.innerText = result[i].name;
 
 
-                console.log(optionNode);
+                let optgroupNode = document.createElement('optgroup');
+                optgroupNode.setAttribute("label",result[i].name);
+                menuSelect.appendChild(optgroupNode);
 
-                parentMenuSelect.appendChild(optionNode);
+
+                if (result[i]['children'] !== null){
+                    for (let j = 0; j < result[i]['children'].length; j++){
+                        let optionNode = document.createElement('option');
+                        optionNode.setAttribute("value",result[i]['children'][j].id);
+                        optionNode.innerText = result[i]['children'][j].name;
+                        optgroupNode.appendChild(optionNode);
+                    }
+                }
+
             }
 
 

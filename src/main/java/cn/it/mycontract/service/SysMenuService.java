@@ -4,6 +4,7 @@ import cn.it.mycontract.entity.SysMenu;
 import com.baomidou.mybatisplus.service.IService;
 import org.apache.ibatis.annotations.Param;
 
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -22,5 +23,7 @@ public interface SysMenuService extends IService<SysMenu> {
 
 
     SysMenu selectOneMenu(String id);
+
+    ArrayList<String> selectParentMenuId(List<String> strings);
 
 }

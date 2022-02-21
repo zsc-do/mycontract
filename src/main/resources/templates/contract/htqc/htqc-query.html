@@ -59,8 +59,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="contract : ${contracts}">
-            <td th:text="${contract.id}"></td>
+        <tr th:each="contract ,index: ${contracts}">
+            <td th:text="${index.count}"></td>
             <td th:text="${contract.name}"></td>
             <td th:text="${contract.contractMoney}"></td>
             <td th:text="${contract.sponsorName}"></td>

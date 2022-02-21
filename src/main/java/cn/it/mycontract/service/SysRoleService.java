@@ -17,7 +17,7 @@ public interface SysRoleService extends IService<SysRole> {
 
     List<SysRole> selectRoleList();
 
-    void addRole(SysRole sysRole, String[] menusId);
+    void addRole(SysRole sysRole, List<String> menusId);
 
-    void updateRole(SysRole sysRole, String[] menusId);
+    void updateRole(SysRole sysRole, List<String> menusId);
 }

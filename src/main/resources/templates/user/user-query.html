@@ -58,8 +58,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="user : ${users}">
-            <td th:text="${user.id}"></td>
+        <tr th:each="user,index : ${users}">
+            <td th:text="${index.count}"></td>
             <td th:text="${user.account}"></td>
             <td th:text="${user.name}"></td>
             <td th:text="${user.mobile}"></td>

@@ -1,25 +1,13 @@
-package cn.it.mycontract.entity;
+package cn.it.mycontract.vo;
 
 import com.baomidou.mybatisplus.annotations.TableId;
-import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
 
 import javax.validation.constraints.NotEmpty;
-import java.io.Serializable;
+import javax.validation.constraints.Pattern;
 import java.util.Date;
 
-/**
- * <p>
- * 
- * </p>
- *
- * @author zhengsc
- * @since 2022-02-14
- */
-@TableName("htgl_contract")
-public class HtglContract implements Serializable {
-
-    private static final long serialVersionUID = 1L;
+public class htglContractVo {
 
     /**
      * 主键id
@@ -35,11 +23,13 @@ public class HtglContract implements Serializable {
     /**
      * 合同名称
      */
-    private String name;
+    @NotEmpty(message = "我在这")
+    private String contractName;
 
     /**
      * 主办单位名称
      */
+    @NotEmpty
     private String sponsorName;
 
     /**
@@ -50,6 +40,7 @@ public class HtglContract implements Serializable {
     /**
      * 经办人名称
      */
+    @NotEmpty
     private String  operatorName;
 
     /**
@@ -60,26 +51,32 @@ public class HtglContract implements Serializable {
     /**
      * 起草日期
      */
-    private Date draftTime;
+    @NotEmpty
+    private String draftTime;
 
     /**
      * 财务预算编号
      */
+    @NotEmpty
     private String budgetCode;
 
     /**
      * 合同金额
      */
+    @NotEmpty
     private String contractMoney;
 
     /**
      * 合同授权代表
      */
+    @NotEmpty
     private String authorization;
 
     /**
      * 合同份数
      */
+    @Pattern(regexp = "^[0-9]*$")
+    @NotEmpty
     private String contractCnt;
 
     /**
@@ -88,16 +85,23 @@ public class HtglContract implements Serializable {
     private Date approveTime;
 
 
-    private String flowStatus;
+    @NotEmpty
+    String partenerName;
 
 
-    public String getFlowStatus() {
-        return flowStatus;
-    }
+    @Pattern(regexp = "^[0-9]*$")
+    @NotEmpty
+    String leaderId;
 
-    public void setFlowStatus(String flowStatus) {
-        this.flowStatus = flowStatus;
-    }
+    @Pattern(regexp = "^[0-9]*$")
+    @NotEmpty
+    String departmentsId;
+
+
+    @Pattern(regexp = "^[0-9]*$")
+    @NotEmpty
+    String bossId;
+
 
     public Integer getId() {
         return id;
@@ -106,6 +110,7 @@ public class HtglContract implements Serializable {
     public void setId(Integer id) {
         this.id = id;
     }
+
     public String getCode() {
         return code;
     }
@@ -113,13 +118,15 @@ public class HtglContract implements Serializable {
     public void setCode(String code) {
         this.code = code;
     }
-    public String getName() {
-        return name;
+
+    public String getContractName() {
+        return contractName;
     }
 
-    public void setName(String name) {
-        this.name = name;
+    public void setContractName(String contractName) {
+        this.contractName = contractName;
     }
+
     public String getSponsorName() {
         return sponsorName;
     }
@@ -127,6 +134,7 @@ public class HtglContract implements Serializable {
     public void setSponsorName(String sponsorName) {
         this.sponsorName = sponsorName;
     }
+
     public Integer getSponsorId() {
         return sponsorId;
     }
@@ -150,13 +158,15 @@ public class HtglContract implements Serializable {
     public void setOperatorId(Integer operatorId) {
         this.operatorId = operatorId;
     }
-    public Date getDraftTime() {
+
+    public String getDraftTime() {
         return draftTime;
     }
 
-    public void setDraftTime(Date draftTime) {
+    public void setDraftTime(String draftTime) {
         this.draftTime = draftTime;
     }
+
     public String getBudgetCode() {
         return budgetCode;
     }
@@ -164,6 +174,7 @@ public class HtglContract implements Serializable {
     public void setBudgetCode(String budgetCode) {
         this.budgetCode = budgetCode;
     }
+
     public String getContractMoney() {
         return contractMoney;
     }
@@ -171,6 +182,7 @@ public class HtglContract implements Serializable {
     public void setContractMoney(String contractMoney) {
         this.contractMoney = contractMoney;
     }
+
     public String getAuthorization() {
         return authorization;
     }
@@ -178,6 +190,7 @@ public class HtglContract implements Serializable {
     public void setAuthorization(String authorization) {
         this.authorization = authorization;
     }
+
     public String getContractCnt() {
         return contractCnt;
     }
@@ -185,6 +198,7 @@ public class HtglContract implements Serializable {
     public void setContractCnt(String contractCnt) {
         this.contractCnt = contractCnt;
     }
+
     public Date getApproveTime() {
         return approveTime;
     }
@@ -193,24 +207,59 @@ public class HtglContract implements Serializable {
         this.approveTime = approveTime;
     }
 
+    public String getPartenerName() {
+        return partenerName;
+    }
+
+    public void setPartenerName(String partenerName) {
+        this.partenerName = partenerName;
+    }
+
+    public String getLeaderId() {
+        return leaderId;
+    }
+
+    public void setLeaderId(String leaderId) {
+        this.leaderId = leaderId;
+    }
+
+    public String getDepartmentsId() {
+        return departmentsId;
+    }
+
+    public void setDepartmentsId(String departmentsId) {
+        this.departmentsId = departmentsId;
+    }
+
+    public String getBossId() {
+        return bossId;
+    }
+
+    public void setBossId(String bossId) {
+        this.bossId = bossId;
+    }
 
 
     @Override
     public String toString() {
-        return "HtglContract{" +
-        "id=" + id +
-        ", code=" + code +
-        ", name=" + name +
-        ", sponsorName=" + sponsorName +
-        ", sponsorId=" + sponsorId +
-        ",  operatorName=" +  operatorName +
-        ", operatorId=" + operatorId +
-        ", draftTime=" + draftTime +
-        ", budgetCode=" + budgetCode +
-        ", contractMoney=" + contractMoney +
-        ", authorization=" + authorization +
-        ", contractCnt=" + contractCnt +
-        ", approveTime=" + approveTime +
-        "}";
+        return "htglContractVo{" +
+                "id=" + id +
+                ", code='" + code + '\'' +
+                ", contractName='" + contractName + '\'' +
+                ", sponsorName='" + sponsorName + '\'' +
+                ", sponsorId=" + sponsorId +
+                ", operatorName='" + operatorName + '\'' +
+                ", operatorId=" + operatorId +
+                ", draftTime=" + draftTime +
+                ", budgetCode='" + budgetCode + '\'' +
+                ", contractMoney='" + contractMoney + '\'' +
+                ", authorization='" + authorization + '\'' +
+                ", contractCnt='" + contractCnt + '\'' +
+                ", approveTime=" + approveTime +
+                ", partenerName='" + partenerName + '\'' +
+                ", leaderId='" + leaderId + '\'' +
+                ", departmentsId='" + departmentsId + '\'' +
+                ", bossId='" + bossId + '\'' +
+                '}';
     }
 }

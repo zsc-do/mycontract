@@ -51,10 +51,15 @@
     </select>
 
 
+    <select id="selectParentMenuId" resultType="string">
+      select DISTINCT sm.parent_id
+      from sys_menu sm
+      where sm.id in
+        <foreach collection="sonMenus" open="(" item="itemId" close=")" separator=",">
+            #{itemId}
+        </foreach>
 
-
-
-
+    </select>
 
 
 </mapper>

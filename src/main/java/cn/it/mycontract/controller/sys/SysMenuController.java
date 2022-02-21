@@ -3,6 +3,7 @@ package cn.it.mycontract.controller.sys;
 
 import cn.it.mycontract.entity.SysMenu;
 import cn.it.mycontract.service.SysMenuService;
+import cn.it.mycontract.util.TreeUtils;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.ui.Model;
@@ -145,6 +146,19 @@ public class SysMenuController {
 
 
         return "redirect:/queryMenuPageList";
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/getMenuTree")
+    public List<SysMenu> getMenuTree(){
+        List<SysMenu> sysMenus = sysMenuService.selectList(new EntityWrapper<SysMenu>()
+                .eq("del_flag","0"));
+
+        List<SysMenu> tree = TreeUtils.formatTree(sysMenus, false);
+
+
+        return tree;
     }
 
 

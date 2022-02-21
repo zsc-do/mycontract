@@ -57,8 +57,8 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="role : ${roles}">
-            <td th:text="${role.id}"></td>
+        <tr th:each="role ,index: ${roles}">
+            <td th:text="${index.count}"></td>
             <td th:text="${role.name}"></td>
             <td th:text="${role.remarks}"></td>
             <td>

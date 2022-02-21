@@ -58,8 +58,8 @@
     </tr>
     </thead>
     <tbody>
-    <tr th:each="menu : ${menus}">
-      <td th:text="${menu.id}"></td>
+    <tr th:each="menu,index : ${menus}">
+      <td th:text="${index.count}"></td>
       <td th:text="${menu.name}"></td>
       <td th:text="${menu.href}"></td>
       <td th:text="${menu.parentName}"></td>
