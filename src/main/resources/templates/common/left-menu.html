@@ -18,7 +18,7 @@
 
         <ul class="pre-scrollable">
             <li th:each="menu : ${menus}" class="dropdown" >
-                <a th:text="${menu.name}" th:href="@{${menu.href}}" target="iframeoper" data-toggle="dropdown" > menus.name<i class="icon-arrow"></i></a>
+                <a th:text="${menu.name}"   data-toggle="dropdown" > menus.name<i class="icon-arrow"></i></a>
                 <ul class="dropdown-menu">
                     <li th:each="lowmenu : ${menu.children}">
                         <a th:text="${lowmenu.name}" th:href="@{${lowmenu.href}}" target="iframeoper"></a>

@@ -93,7 +93,6 @@ public class htglContractVo {
     @NotEmpty
     String leaderId;
 
-    @Pattern(regexp = "^[0-9]*$")
     @NotEmpty
     String departmentsId;
 

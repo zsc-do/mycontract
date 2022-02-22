@@ -4,6 +4,8 @@ import cn.it.mycontract.entity.HtglContract;
 import cn.it.mycontract.entity.SysArea;
 import com.baomidou.mybatisplus.service.IService;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务类
@@ -19,5 +21,7 @@ public interface HtglContractService extends IService<HtglContract> {
     void saveHtqc(HtglContract htglContract,
                   String partenerName,
                   String leaderId,String departmentsId,String bossId);
+
+    List<HtglContract> selectHtqcRecode(Integer id);
 
 }

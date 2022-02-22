@@ -16,6 +16,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.List;
+
 /**
  * <p>
  *  服务实现类
@@ -67,7 +69,7 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
             HtglContractPartener htglContractPartener = new HtglContractPartener();
             htglContractPartener.setContractId(htglContract.getId());
             htglContractPartener.setPartenerName(pName);
-            htglContractPartener.setPartenerType(s[cur]);
+            htglContractPartener.setPartenerType(s[cur] + "方");
 
             htglContractPartenerMapper.insert(htglContractPartener);
 
@@ -84,26 +86,43 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
         htglProcessRecordMapper.insert(processRecord1);
 
 
-        Integer departmentLeaderId = sysAreaMapper.selectList(new EntityWrapper<SysArea>()
-                .eq("id", departmentsId)).get(0).getLeaderId();
+        String[] departmentIdSplit = departmentsId.split(",");
 
-        HtglProcessRecord processRecord2 = new HtglProcessRecord();
-        processRecord2.setContractId(htglContract.getId());
-        processRecord2.setNowHandler(departmentLeaderId);
-        processRecord2.setStatus("0");
-        processRecord2.setDelSort("2");
-        htglProcessRecordMapper.insert(processRecord2);
+
+        Integer cur2 = 2;
+        for (String deptId : departmentIdSplit){
+            SysArea sysArea = sysAreaMapper.selectList(new EntityWrapper<SysArea>()
+                    .eq("id", deptId)).get(0);
+
+            HtglProcessRecord processRecord2 = new HtglProcessRecord();
+            processRecord2.setContractId(htglContract.getId());
+            processRecord2.setNowHandler(sysArea.getLeaderId());
+            processRecord2.setStatus("0");
+            processRecord2.setDelSort(cur2.toString());
+            htglProcessRecordMapper.insert(processRecord2);
+
+            cur2 ++;
+        }
+
+
 
 
         HtglProcessRecord processRecord3 = new HtglProcessRecord();
         processRecord3.setContractId(htglContract.getId());
         processRecord3.setNowHandler(Integer.parseInt(bossId));
         processRecord3.setStatus("0");
-        processRecord3.setDelSort("3");
+        processRecord3.setDelSort(cur2.toString());
         htglProcessRecordMapper.insert(processRecord3);
 
 
 
+    }
+
+    @Override
+    public List<HtglContract> selectHtqcRecode(Integer id) {
+
+        List<HtglContract> htglContractList = htglContractMapper.selectHtqcRecode(id);
+        return htglContractList;
     }
 
 

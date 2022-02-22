@@ -1,5 +1,6 @@
 package cn.it.mycontract.entity;
 
+import com.baomidou.mybatisplus.annotations.TableField;
 import com.baomidou.mybatisplus.annotations.TableId;
 import com.baomidou.mybatisplus.annotations.TableName;
 import com.baomidou.mybatisplus.enums.IdType;
@@ -7,6 +8,7 @@ import com.baomidou.mybatisplus.enums.IdType;
 import javax.validation.constraints.NotEmpty;
 import java.io.Serializable;
 import java.util.Date;
+import java.util.List;
 
 /**
  * <p>
@@ -90,6 +92,18 @@ public class HtglContract implements Serializable {
 
     private String flowStatus;
 
+
+    @TableField(exist = false)
+    private List<HtglProcessRecord> htglProcessRecordList;
+
+
+    public List<HtglProcessRecord> getHtglProcessRecordList() {
+        return htglProcessRecordList;
+    }
+
+    public void setHtglProcessRecordList(List<HtglProcessRecord> htglProcessRecordList) {
+        this.htglProcessRecordList = htglProcessRecordList;
+    }
 
     public String getFlowStatus() {
         return flowStatus;

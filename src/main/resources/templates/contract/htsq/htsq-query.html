@@ -36,11 +36,7 @@
     </div>
 </div>
 
-<div class="panel panel-default">
-    <div class="panel-body">
-        <a th:href="@{/toHtqcAdd}" class="btn btn btn-primary">起草合同</a>
-    </div>
-</div>
+
 
 
 <div class="table-responsive">
@@ -59,7 +55,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:each="contract ,index: ${contracts}">
+        <tr th:if="${contracts != null}" th:each="contract ,index: ${contracts}">
             <td th:text="${index.count}"></td>
             <td th:text="${contract.name}"></td>
             <td th:text="${contract.contractMoney}"></td>
@@ -67,12 +63,22 @@
             <td th:text="${contract.operatorName}"></td>
             <td th:text="${#dates.format(contract.draftTime, 'yyyy-MM-dd')}"></td>
             <td>
-                <div class="btn-group">
-                    <a th:href="@{/auditPass(id=${contract.id})}" class="btn btn-danger">通过</a>
+                <!--<div class="btn-group">-->
+                    <!--<a th:href="@{/auditPass(id=${contract.id})}" class="btn btn-danger">通过</a>-->
+                <!--</div>-->
+                <!--<div class="btn-group">-->
+                    <!--<a th:href="@{/returnContract(id=${contract.id})}" class="btn btn-danger">退回</a>-->
+                <!--</div>-->
+
+                <div class="btn-group dealBtnGroup">
+                    <a th:each="record: ${contract.htglProcessRecordList}" th:if="${record.status == '2'}"
+                       th:href="@{/toHtqcDetail(cid=${contract.id})}" class="btn btn-primary dealBtn">查询</a>
+
+                    <a th:each="record: ${contract.htglProcessRecordList}" th:if="${record.status == '1'}"
+                       th:href="@{/toHtsqPage(cid=${contract.id})}" class="btn btn-success">办理</a>
                 </div>
-                <div class="btn-group">
-                    <a th:href="@{/returnContract(id=${contract.id})}" class="btn btn-danger">退回</a>
-                </div>
+
+
             </td>
 
         </tr>
@@ -84,4 +90,26 @@
 </div>
 
 </body>
+
+<script>
+
+
+    //回显按钮，办理或查询
+    let dealBtnGroup = document.getElementsByClassName('dealBtnGroup');
+
+    for (let i = 0;i<dealBtnGroup.length; i++){
+        let curBtnGroup = dealBtnGroup[i];
+        let dealbtnLast = curBtnGroup.lastElementChild;
+
+
+        $(curBtnGroup).empty();
+        curBtnGroup.append(dealbtnLast);
+    }
+    
+    
+
+
+
+
+</script>
 </html>

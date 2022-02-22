@@ -5,6 +5,28 @@
 <mapper namespace="cn.it.mycontract.mapper.HtglContractMapper">
 
 
+    <resultMap id="ContractResult" type="cn.it.mycontract.entity.HtglContract">
+        <id column="id" property="id"/>
+        <result column="code" property="code"/>
+        <result column="name" property="name"/>
+        <result column="sponsor_name" property="sponsorName"/>
+        <result column="sponsor_id" property="sponsorId"/>
+        <result column="operator_name" property="operatorName"/>
+        <result column="operator_id" property="operatorId"/>
+        <result column="draft_time" property="draftTime"/>
+        <result column="budget_code" property="budgetCode"/>
+        <result column="contrac_money" property="contractMoney"/>
+        <result column="contractcnt" property="contractCnt"/>
+        <result column="approve_time" property="approveTime"/>
+        <result column="flow_status" property="flowStatus"/>
+
+
+        <collection property="htglProcessRecordList" ofType="cn.it.mycontract.entity.HtglProcessRecord">
+            <id column="record_id" property="id"/>
+            <result column="record_status" property="status"></result>
+        </collection>
+    </resultMap>
+
 
     <!--
         查询用户部门的上级领导与所在部门
@@ -25,5 +47,18 @@ WHERE
 	LEFT JOIN sys_area sa
 	ON su.area_id = sa.id
 	WHERE su.account = #{account} )
+    </select>
+
+    <select id="selectHtqcRecode" resultMap="ContractResult">
+        SELECT
+        hc.*,
+        hpr.id as record_id,
+        hpr.`status` as record_status
+    FROM
+        htgl_contract hc
+        LEFT JOIN htgl_process_record hpr ON hc.id = hpr.contract_id
+    WHERE
+        hpr.now_handler = #{id}
+        AND hpr.`status` != 0
     </select>
 </mapper>
