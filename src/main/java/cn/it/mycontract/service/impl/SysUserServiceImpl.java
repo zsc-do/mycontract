@@ -1,11 +1,10 @@
 package cn.it.mycontract.service.impl;
 
-import cn.it.mycontract.entity.SysRole;
-import cn.it.mycontract.entity.SysRoleMenu;
-import cn.it.mycontract.entity.SysUser;
-import cn.it.mycontract.entity.SysUserRole;
+import cn.it.mycontract.entity.*;
+import cn.it.mycontract.mapper.SysUserAreaMapper;
 import cn.it.mycontract.mapper.SysUserMapper;
 import cn.it.mycontract.mapper.SysUserRoleMapper;
+import cn.it.mycontract.service.SysUserAreaService;
 import cn.it.mycontract.service.SysUserService;
 import cn.it.mycontract.util.SaltUtils;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -15,7 +14,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.util.ArrayList;
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
+import java.util.stream.Collectors;
 
 /**
  * <p>
@@ -34,17 +37,29 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     @Autowired
     private SysUserRoleMapper sysUserRoleMapper;
 
+    @Autowired
+    private SysUserAreaMapper sysUserAreaMapper;
+
 
     @Override
     public List<SysUser> selectUserList() {
 
         List<SysUser> sysUsers = sysUserMapper.selectUserList();
+
+        //去重
+        for (SysUser sysUser : sysUsers){
+            List<SysArea> areaList = sysUser.getAreaList();
+            Set<SysArea> areaSet = new HashSet<>(areaList);
+            List<SysArea> list = new ArrayList<>(areaSet);
+
+            sysUser.setAreaList(list);
+        }
         return sysUsers;
     }
 
     @Override
     @Transactional
-    public void addUser(SysUser sysUser, String[] rolesId) {
+    public void addUser(SysUser sysUser, String[] rolesId,String[] areasId) {
 
         //处理业务调用dao
         //1.生成随机盐
@@ -68,15 +83,28 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
             sysUserRoleMapper.insert(sysUserRole);
         }
 
+
+        for (String areaId : areasId){
+
+            SysUserArea sysUserArea = new SysUserArea();
+            sysUserArea.setUserId(sysUser.getId());
+            sysUserArea.setAreaId(Integer.parseInt(areaId));
+
+            sysUserAreaMapper.insert(sysUserArea);
+        }
+
     }
 
     @Override
     @Transactional
-    public void updateUser(SysUser sysUser, String[] rolesId) {
+    public void updateUser(SysUser sysUser, String[] rolesId, String[] areasId) {
 
         sysUserMapper.update(sysUser,new EntityWrapper<SysUser>()
                 .eq("id",sysUser.getId()));
 
+
+        sysUserAreaMapper.delete(new EntityWrapper<SysUserArea>()
+                .eq("user_id",sysUser.getId()));
 
         sysUserRoleMapper.delete(new EntityWrapper<SysUserRole>()
                 .eq("user_id",sysUser.getId()));
@@ -93,6 +121,17 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
 
         }
 
+
+        for (String areaId : areasId){
+
+
+            SysUserArea sysUserArea = new SysUserArea();
+            sysUserArea.setUserId(sysUser.getId());
+            sysUserArea.setAreaId(Integer.parseInt(areaId));
+
+            sysUserAreaMapper.insert(sysUserArea);
+        }
+
     }
 
     @Override
@@ -106,6 +145,14 @@ public class SysUserServiceImpl extends ServiceImpl<SysUserMapper, SysUser> impl
     public SysUser selectLoginUser(String account) {
 
         SysUser sysUser = sysUserMapper.selectLoginUser(account);
+        return sysUser;
+    }
+
+    @Override
+    public SysUser selectUserAndArea(Integer id) {
+
+        SysUser sysUser = sysUserMapper.selectUserAndArea(id);
+
         return sysUser;
     }
 }

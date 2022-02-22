@@ -1,5 +1,6 @@
 package cn.it.mycontract.mapper;
 
+import cn.it.mycontract.entity.SysArea;
 import cn.it.mycontract.entity.SysUser;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import org.apache.ibatis.annotations.Param;
@@ -21,4 +22,7 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
     List<SysUser> selectBoss();
 
     SysUser selectLoginUser(@Param("account") String account);
+
+    SysUser selectUserAndArea(@Param("user_id") Integer id);
+
 }

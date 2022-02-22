@@ -29,13 +29,13 @@ public class htglContractVo {
     /**
      * 主办单位名称
      */
-    @NotEmpty
     private String sponsorName;
 
     /**
      * 主办单位id
      */
-    private Integer sponsorId;
+    @NotEmpty
+    private String sponsorId;
 
     /**
      * 经办人名称
@@ -46,7 +46,7 @@ public class htglContractVo {
     /**
      * 经办人id
      */
-    private Integer operatorId;
+    private String operatorId;
 
     /**
      * 起草日期
@@ -135,13 +135,7 @@ public class htglContractVo {
         this.sponsorName = sponsorName;
     }
 
-    public Integer getSponsorId() {
-        return sponsorId;
-    }
 
-    public void setSponsorId(Integer sponsorId) {
-        this.sponsorId = sponsorId;
-    }
 
     public String getOperatorName() {
         return operatorName;
@@ -151,11 +145,19 @@ public class htglContractVo {
         this.operatorName = operatorName;
     }
 
-    public Integer getOperatorId() {
+    public String getSponsorId() {
+        return sponsorId;
+    }
+
+    public void setSponsorId(String sponsorId) {
+        this.sponsorId = sponsorId;
+    }
+
+    public String getOperatorId() {
         return operatorId;
     }
 
-    public void setOperatorId(Integer operatorId) {
+    public void setOperatorId(String operatorId) {
         this.operatorId = operatorId;
     }
 

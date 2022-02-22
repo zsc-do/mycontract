@@ -17,4 +17,5 @@ public interface SysAreaMapper extends BaseMapper<SysArea> {
 
     List<SysArea> selectAreaList();
 
+    SysArea getMatchLeader(String sponsorId);
 }

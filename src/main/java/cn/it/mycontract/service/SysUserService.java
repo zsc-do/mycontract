@@ -1,5 +1,6 @@
 package cn.it.mycontract.service;
 
+import cn.it.mycontract.entity.SysArea;
 import cn.it.mycontract.entity.SysUser;
 import com.baomidou.mybatisplus.service.IService;
 
@@ -18,11 +19,14 @@ public interface SysUserService extends IService<SysUser> {
 
     List<SysUser> selectUserList();
 
-    void addUser(SysUser sysUser, String[] rolesIdStr);
+    void addUser(SysUser sysUser, String[] rolesIdStr,String[] areasIdStr);
 
-    void updateUser(SysUser sysUser, String[] rolesIdStr);
+    void updateUser(SysUser sysUser, String[] rolesIdStr, String[] areasIdStr);
 
     List<SysUser> selectBoss();
 
     SysUser selectLoginUser(String account);
+
+    SysUser selectUserAndArea(Integer id);
+
 }

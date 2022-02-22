@@ -59,7 +59,7 @@ class MycontractApplicationTests {
 //		stConfig.setCapitalMode(true) // 全局大写命名
 //				.setDbColumnUnderline(true) //表名字段名是否使用下滑线命名
 //				.setNaming(NamingStrategy.underline_to_camel) // 数据库表映射到实体的命名策略
-//				.setInclude("htgl_process_record") //生成的表
+//				.setInclude("sys_user_area") //生成的表
 //				.setTablePrefix(""); // 表前缀
 //		// 包名策略
 //		PackageConfig pkConfig = new PackageConfig();

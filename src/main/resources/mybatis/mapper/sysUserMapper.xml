@@ -15,6 +15,11 @@
             <id column="role_id" property="id"/>
             <result column="role_name" property="name"></result>
         </collection>
+
+        <collection property="areaList" ofType="cn.it.mycontract.entity.SysArea">
+            <id column="area_id" property="id"/>
+            <result column="area_name" property="name"></result>
+        </collection>
     </resultMap>
 
     <select id="selectUserList" resultMap="sysUserResult">
@@ -24,12 +29,16 @@
 	su.account AS user_account,
 	su.mobile AS user_mobile,
 	sr.id AS role_id,
-	sr.`name` AS role_name
+	sr.`name` AS role_name,
+	sa.id AS area,
+	sa.`name` AS area_name
     FROM
         sys_user su
         LEFT JOIN sys_user_role sur ON su.id = sur.user_id
         LEFT JOIN sys_role sr ON sur.role_id = sr.id
-    WHERE su.del_flag = "0"
+        LEFT JOIN sys_user_area sua ON su.id = sua.user_id
+        LEFT JOIN sys_area sa ON sua.area_id = sa.id
+    WHERE su.del_flag = "0" AND sr.del_flag = "0" AND sa.del_flag = "0"
 
     </select>
 
@@ -58,5 +67,21 @@ SELECT
         LEFT JOIN sys_role sr ON sur.role_id = sr.id
     WHERE su.del_flag = "0" AND su.account = #{account}
 
+    </select>
+
+
+    <select id="selectUserAndArea" resultMap="sysUserResult">
+
+        SELECT
+        su.id as user_id,
+        su.`name` as user_name,
+        sa.id as area_id,
+        sa.NAME as area_name
+    FROM
+        sys_user su
+        LEFT JOIN sys_user_area sua ON su.id = sua.user_id
+        LEFT JOIN sys_area sa ON sua.area_id = sa.id
+    WHERE
+        su.id = #{user_id}
     </select>
 </mapper>

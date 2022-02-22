@@ -84,4 +84,29 @@ public class SysArea implements Serializable {
                 ", delFlag='" + delFlag + '\'' +
                 '}';
     }
+
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || getClass() != o.getClass()) return false;
+
+        SysArea sysArea = (SysArea) o;
+
+        if (id != null ? !id.equals(sysArea.id) : sysArea.id != null) return false;
+        if (name != null ? !name.equals(sysArea.name) : sysArea.name != null) return false;
+        if (leaderId != null ? !leaderId.equals(sysArea.leaderId) : sysArea.leaderId != null) return false;
+        if (delFlag != null ? !delFlag.equals(sysArea.delFlag) : sysArea.delFlag != null) return false;
+        return leaderName != null ? leaderName.equals(sysArea.leaderName) : sysArea.leaderName == null;
+    }
+
+    @Override
+    public int hashCode() {
+        int result = id != null ? id.hashCode() : 0;
+        result = 31 * result + (name != null ? name.hashCode() : 0);
+        result = 31 * result + (leaderId != null ? leaderId.hashCode() : 0);
+        result = 31 * result + (delFlag != null ? delFlag.hashCode() : 0);
+        result = 31 * result + (leaderName != null ? leaderName.hashCode() : 0);
+        return result;
+    }
 }

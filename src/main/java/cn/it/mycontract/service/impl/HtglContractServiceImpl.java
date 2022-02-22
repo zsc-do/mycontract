@@ -102,6 +102,8 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
         processRecord3.setDelSort("3");
         htglProcessRecordMapper.insert(processRecord3);
 
+
+
     }
 
 

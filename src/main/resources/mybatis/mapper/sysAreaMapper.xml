@@ -15,4 +15,17 @@
         LEFT JOIN sys_user su ON sa.leader_id = su.id
         where sa.del_flag = "0";
     </select>
+
+
+    <select id="getMatchLeader" resultType="cn.it.mycontract.entity.SysArea">
+      SELECT
+        sa.leader_id,
+        su.`name`
+    FROM
+        sys_area sa
+        LEFT JOIN sys_user su ON sa.leader_id = su.id
+    WHERE
+        sa.id = #{sponsorId}
+
+    </select>
 </mapper>

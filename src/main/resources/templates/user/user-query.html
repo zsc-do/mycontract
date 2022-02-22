@@ -53,7 +53,8 @@
             <th>账号</th>
             <th>姓名</th>
             <th>电话</th>
-            <th>用户关联的所有角色</th>
+            <th>拥有的角色</th>
+            <th>所属部门</th>
             <th>操作</th>
         </tr>
         </thead>
@@ -67,6 +68,14 @@
                 <select class="form-control roles-select" name="rolesId">
                     <option th:each="role : ${user.roleList}" value="0">
                         <div th:text="${role.name}"></div>
+                    </option>
+                </select>
+            </td>
+
+            <td>
+                <select class="form-control areas-select" name="areasId">
+                    <option th:each="area : ${user.areaList}" value="0">
+                        <div th:text="${area.name}"></div>
                     </option>
                 </select>
             </td>

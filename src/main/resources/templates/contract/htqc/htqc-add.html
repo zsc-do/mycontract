@@ -29,11 +29,14 @@
             </div>
             <div class="form-group">
                 <label>需求单位:</label>
-                <input type="text" name="sponsorName" class="form-control"/>
+                <select id="sponsor-id" class=" form-control sponsor-select" name="sponsorId" oninput="change()">
+                    <option style="display: none"></option>
+                    <option th:each="area: ${user.areaList}" th:text="${area.name}" th:value="${area.id}"></option>
+                </select>
             </div>
             <div class="form-group">
                 <label>需求单位经办人:</label>
-                <input type="text" name="operatorName" class="form-control"/>
+                <input th:value="${user.name}" type="text" name="operatorName" class="form-control" readonly/>
             </div>
             <div class="form-group">
                 <label>起草日期:</label>
@@ -119,28 +122,36 @@
     let bossSelect = document.getElementsByClassName('boss-select')[0];
 
 
-    $.ajax({
-        type:"GET",
-        url:basePath + "/getAllLeader",
-        data:"",//请求参数
-        dataType:"JSON",
-        success:function(result){
+
+    function change() {
+
+        var options = $("#sponsor-id option:selected");　　　　//获取选中项
+
+        var sponsorId = options.val();　　　　　　　　　　　　　　//获取选中项的值
 
 
+        $.ajax({
+            type:"GET",
+            url:basePath + "/getMatchLeader",
+            data:"sponsorId="+sponsorId,//请求参数
+            dataType:"JSON",
+            success:function(result){
 
-            for (let i = 0; i < result.length; i++){
+                $(".leader-select").empty();
+
+
                 let optionNode = document.createElement('option');
-                optionNode.setAttribute("value",result[i].leaderId);
-                optionNode.innerText = result[i].leaderName;
+                optionNode.setAttribute("value",result['leaderId']);
+                optionNode.innerText = result['name'];
 
 
                 leaderSelect.appendChild(optionNode);
+
             }
+        });
+    }
 
 
-
-        }
-    });
 
 
 
@@ -191,6 +202,9 @@
 
         }
     });
+
+
+
 
 
 </script>

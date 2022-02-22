@@ -2,6 +2,7 @@ package cn.it.mycontract.controller.sys;
 
 
 import cn.it.mycontract.entity.SysArea;
+import cn.it.mycontract.entity.SysRole;
 import cn.it.mycontract.entity.SysUser;
 import cn.it.mycontract.service.SysAreaService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -11,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import java.util.List;
 
@@ -51,15 +53,15 @@ public class SysAreaController {
 
     @RequestMapping("/addArea")
     public String addUser(@RequestParam("areaName") String areaName,
-                          @RequestParam("usersId") String usersId){
+                          @RequestParam("leaderId") String leaderId){
 
 
         SysArea sysArea = new SysArea();
         sysArea.setDelFlag("0");
         sysArea.setName(areaName);
-        sysArea.setLeaderId(Integer.parseInt(usersId));
+        sysArea.setLeaderId(Integer.parseInt(leaderId));
 
-        sysAreaService.insert(sysArea);
+        sysAreaService.addArea(sysArea,leaderId);
 
         return "redirect:/queryAreaPageList";
 
@@ -94,23 +96,34 @@ public class SysAreaController {
 
 
     @RequestMapping("/updateArea")
-    public String updateUser(@RequestParam("areaId") String areaId,
+    public String updateArea(@RequestParam("areaId") String areaId,
                              @RequestParam("areaName") String areaName,
-                             @RequestParam("usersId") String usersId){
+                             @RequestParam("leaderId") String leaderId){
 
 
         SysArea sysArea = new SysArea();
+        sysArea.setId(Integer.parseInt(areaId));
         sysArea.setName(areaName);
-        sysArea.setLeaderId(Integer.parseInt(usersId));
+        sysArea.setLeaderId(Integer.parseInt(leaderId));
 
-        sysAreaService.update(sysArea,new EntityWrapper<SysArea>()
-                .eq("id",areaId));
+        sysAreaService.updateArea(sysArea,leaderId);
 
 
 
 
 
         return "redirect:/queryAreaPageList";
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/getAllAreas")
+    public List<SysArea> getAllAreas(){
+        List<SysArea> sysArea = sysAreaService.selectList(new EntityWrapper<SysArea>()
+                .eq("del_flag",0));
+
+
+        return sysArea;
     }
 
 }

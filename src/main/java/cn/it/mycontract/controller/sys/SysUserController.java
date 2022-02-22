@@ -56,11 +56,13 @@ public class SysUserController {
                           @RequestParam("userAccount") String userAccount,
                           @RequestParam("userPassword") String userPassword,
                           @RequestParam("userMobile") String userMobile,
-                          @RequestParam("rolesId") String rolesId){
+                          @RequestParam("rolesId") String rolesId,
+                          @RequestParam("areasId") String areasId){
 
 
         String[] rolesIdStr = rolesId.split(",");
 
+        String[] areasIdStr = areasId.split(",");
 
         SysUser sysUser = new SysUser();
         sysUser.setAccount(userAccount);
@@ -70,7 +72,7 @@ public class SysUserController {
         sysUser.setDelFlag("0");
 
 
-        sysUserService.addUser(sysUser,rolesIdStr);
+        sysUserService.addUser(sysUser,rolesIdStr,areasIdStr);
 
 
 
@@ -117,10 +119,13 @@ public class SysUserController {
                              @RequestParam("username") String username,
                              @RequestParam("userAccount") String userAccount,
                              @RequestParam("userMobile") String userMobile,
-                             @RequestParam("rolesId") String rolesId){
+                             @RequestParam("rolesId") String rolesId,
+                             @RequestParam("areasId") String areasId){
 
 
         String[] rolesIdStr = rolesId.split(",");
+
+        String[] areasIdStr = areasId.split(",");
 
 
         SysUser sysUser = new SysUser();
@@ -130,7 +135,7 @@ public class SysUserController {
         sysUser.setId(Integer.parseInt(userId));
 
 
-        sysUserService.updateUser(sysUser,rolesIdStr);
+        sysUserService.updateUser(sysUser,rolesIdStr,areasIdStr);
 
 
 

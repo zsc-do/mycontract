@@ -28,7 +28,7 @@
 
             <div class="form-group">
                 <label>选择部门领导:</label>
-                <select class="form-control users-select" name="usersId">
+                <select class="form-control users-select" name="leaderId">
                 </select>
             </div>
 
@@ -44,7 +44,7 @@
     // 通过Thymeleaf内置函数获取应用程序上下文路径
     let basePath = [[${#httpServletRequest.getContextPath()}]];
 
-    let usersSelect = document.getElementsByClassName('users-select')[0];
+    let leaderSelect = document.getElementsByClassName('users-select')[0];
 
     $.ajax({
         type:"GET",
@@ -62,7 +62,7 @@
 
 
 
-                usersSelect.appendChild(optionNode);
+                leaderSelect.appendChild(optionNode);
             }
 
 

@@ -17,4 +17,9 @@ public interface SysAreaService extends IService<SysArea> {
 
     List<SysArea> selectAreaList();
 
+    void addArea(SysArea sysArea, String leaderId);
+
+    void updateArea(SysArea sysArea, String leaderId);
+
+    SysArea getMatchLeader(String sponsorId);
 }

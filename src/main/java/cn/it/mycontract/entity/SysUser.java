@@ -37,10 +37,14 @@ public class SysUser implements Serializable {
 
     private String delFlag;
 
-    private Integer areaId;
+
 
     @TableField(exist = false)
     private List<SysRole> roleList;
+
+
+    @TableField(exist = false)
+    private List<SysArea> areaList;
 
     public String getSalt() {
         return salt;
@@ -104,13 +108,7 @@ public class SysUser implements Serializable {
     }
 
 
-    public Integer getAreaId() {
-        return areaId;
-    }
 
-    public void setAreaId(Integer areaId) {
-        this.areaId = areaId;
-    }
 
     public List<SysRole> getRoleList() {
         return roleList;
@@ -118,6 +116,15 @@ public class SysUser implements Serializable {
 
     public void setRoleList(List<SysRole> roleList) {
         this.roleList = roleList;
+    }
+
+
+    public List<SysArea> getAreaList() {
+        return areaList;
+    }
+
+    public void setAreaList(List<SysArea> areaList) {
+        this.areaList = areaList;
     }
 
     @Override
