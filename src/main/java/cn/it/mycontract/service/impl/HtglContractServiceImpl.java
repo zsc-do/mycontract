@@ -1,19 +1,22 @@
 package cn.it.mycontract.service.impl;
 
 import cn.it.mycontract.entity.*;
-import cn.it.mycontract.mapper.HtglContractMapper;
-import cn.it.mycontract.mapper.HtglContractPartenerMapper;
-import cn.it.mycontract.mapper.HtglProcessRecordMapper;
-import cn.it.mycontract.mapper.SysAreaMapper;
+import cn.it.mycontract.mapper.*;
 import cn.it.mycontract.service.HtglContractService;
+import cn.it.mycontract.service.HtglOpinionService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.web.multipart.MultipartFile;
 
+import java.io.File;
+import java.io.IOException;
+import java.util.Date;
 import java.util.List;
+import java.util.UUID;
 
 /**
  * <p>
@@ -25,7 +28,6 @@ import java.util.List;
  */
 @Service
 public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, HtglContract> implements HtglContractService {
-
 
 
     @Autowired
@@ -41,6 +43,12 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
     @Autowired
     HtglProcessRecordMapper htglProcessRecordMapper;
 
+    @Autowired
+    HtglOpinionService htglOpinionService;
+
+    @Autowired
+    HtglFileMapper htglFileMapper;
+
     @Override
     public SysArea selectLeader(String account) {
 
@@ -55,7 +63,9 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
                          String leaderId,
                          String departmentsId,
                          String bossId,
-                         SysArea userArea) {
+                         SysArea userArea,
+                         String opinionContent,
+                         MultipartFile file) {
 
         htglContractMapper.insert(htglContract);
 
@@ -118,8 +128,52 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
         htglProcessRecordMapper.insert(processRecord3);
 
 
+        HtglOpinion htglOpinion = new HtglOpinion();
+        htglOpinion.setContractId(htglContract.getId());
+        htglOpinion.setIsPassed("1");
+        htglOpinion.setPersonId(htglContract.getOperatorId());
+        htglOpinion.setPersonName(htglContract.getOperatorName());
+        htglOpinion.setInputTime(new Date());
+        htglOpinion.setAreaName(htglContract.getSponsorName());
+        htglOpinion.setOpinionContent(opinionContent);
+
+        htglOpinionService.insert(htglOpinion);
+
+
+        uploadHTZW(file,htglContract);
 
     }
+
+
+    //上传合同正文
+    private void uploadHTZW(MultipartFile file,HtglContract htglContract) {
+        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+
+
+        int pos = file.getOriginalFilename().lastIndexOf('.');
+        String houZui = "";
+        if (pos > -1) {
+            houZui = file.getOriginalFilename().substring(pos);
+        }
+
+        String filePath = "D:\\contractUpload\\"+uuid + houZui;
+
+        try {
+            file.transferTo(new File(filePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        HtglFile htglFile = new HtglFile();
+        htglFile.setFileName(file.getOriginalFilename());
+        htglFile.setContractId(htglContract.getId());
+        htglFile.setFilePath(filePath);
+        htglFile.setStatus(1);
+
+        htglFileMapper.insert(htglFile);
+    }
+
+
 
     @Override
     public List<HtglContract> selectHtqcRecode(Integer id) {
@@ -128,5 +182,23 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
         return htglContractList;
     }
 
+
+    public static void main(String[] args) {
+        String fname = "文件的名字郑少畅-应聘求职分析报告.docx";
+        int pos = fname.lastIndexOf('.');
+
+        if (pos > -1) {
+
+            System.out.println(fname.substring(pos));
+
+
+        } else {
+
+            System.out.println(fname);
+        }
+
+
+
+    }
 
 }

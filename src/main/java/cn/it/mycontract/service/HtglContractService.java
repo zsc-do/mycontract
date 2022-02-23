@@ -4,6 +4,7 @@ import cn.it.mycontract.entity.HtglContract;
 import cn.it.mycontract.entity.SysArea;
 import cn.it.mycontract.entity.SysUser;
 import com.baomidou.mybatisplus.service.IService;
+import org.springframework.web.multipart.MultipartFile;
 
 import java.util.List;
 
@@ -24,7 +25,9 @@ public interface HtglContractService extends IService<HtglContract> {
                   String leaderId,
                   String departmentsId,
                   String bossId,
-                  SysArea sysArea);
+                  SysArea sysArea,
+                  String opinionContent,
+                  MultipartFile file);
 
     List<HtglContract> selectHtqcRecode(Integer id);
 

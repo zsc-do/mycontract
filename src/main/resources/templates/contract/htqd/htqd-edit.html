@@ -63,6 +63,12 @@
                             <input th:value="${contractPartener.partenerName}" type="text" name="partenerName" class="partnerType form-control"/>
                         </div>
                     </div>
+                </fieldset>
+
+
+                    <div  class="btn-group">
+                        <a th:href="@{/downloadHTZW(cid=${contract.id})}" class="btn btn-info">合同正文下载</a>
+                    </div>
 
                     <div class="form-group">
                         <label>业务意见:</label>
@@ -70,8 +76,7 @@
                         </ul>
                     </div>
 
-
-
+                <fieldset disabled>
                     <div class="form-group">
                         <label>请选择下一步流程(部门领导审核):</label>
                         <select class=" form-control leader-select" name="leaderId">

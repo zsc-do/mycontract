@@ -12,14 +12,15 @@ import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
+import java.io.File;
+import java.io.IOException;
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
-import java.util.ArrayList;
-import java.util.Calendar;
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+
 import cn.it.mycontract.vo.htglContractVo;
 import org.springframework.web.bind.annotation.ResponseBody;
+import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -45,6 +46,12 @@ public class HtqcController {
 
     @Autowired
     HtglContractPartenerService htglContractPartenerService;
+
+    @Autowired
+    HtglOpinionService htglOpinionService;
+
+    @Autowired
+    HtglFileService htglFileService;
 
 
 
@@ -126,11 +133,17 @@ public class HtqcController {
 
 
     /*
-    * 保存合同
+    * 保存起草的合同
     */
     @RequestMapping("/addContract")
     public String addContract(@Valid htglContractVo htglContractVo, BindingResult bindingResult,
-                              HttpServletRequest request){
+                              @RequestParam("opinionContent") String opinionContent,
+                              HttpServletRequest request,
+                              @RequestParam("htzwFile") MultipartFile file){
+
+
+
+        System.out.println("文件的名字"+file.getOriginalFilename());
 
 
         if (bindingResult.hasErrors()){
@@ -183,7 +196,8 @@ public class HtqcController {
 
         htglContractService.saveHtqc(htglContract,htglContractVo.getPartenerName(),
                 htglContractVo.getLeaderId(),htglContractVo.getDepartmentsId(),
-                htglContractVo.getBossId(),sysArea);
+                htglContractVo.getBossId(),sysArea,opinionContent,file);
+
 
 
 
@@ -239,10 +253,44 @@ public class HtqcController {
                                  @RequestParam("leaderId") String leaderId,
                                  @RequestParam("departmentsId") String departmentsId,
                                  @RequestParam("bossId") String bossId,
-                                 @RequestParam("sponsorId") String sponsorId){
+                                 @RequestParam("sponsorId") String sponsorId,
+                                 @RequestParam("opinionContent") String opinionContent,
+                                 @RequestParam("htzwFile") MultipartFile file,
+                                 HttpServletRequest request){
+
+
+
 
         //修改附件代码
-        //······
+        String uuid = UUID.randomUUID().toString().replaceAll("-", "");
+
+        int pos = file.getOriginalFilename().lastIndexOf('.');
+        String houZui = "";
+        if (pos > -1) {
+            houZui = file.getOriginalFilename().substring(pos);
+        }
+
+        String filePath = "D:\\contractUpload\\"+uuid + houZui;
+
+        try {
+            file.transferTo(new File(filePath));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+
+        HtglFile htglFileOld = new HtglFile();
+        htglFileOld.setStatus(0);
+        htglFileService.update(htglFileOld,new EntityWrapper<HtglFile>()
+                .eq("contract_id",cid));
+
+
+        HtglFile htglFileNew = new HtglFile();
+        htglFileNew.setFileName(file.getOriginalFilename());
+        htglFileNew.setContractId(Integer.parseInt(cid));
+        htglFileNew.setFilePath(filePath);
+        htglFileNew.setStatus(1);
+        htglFileService.insert(htglFileNew);
 
 
 
@@ -295,6 +343,21 @@ public class HtqcController {
         processRecord3.setDelSort(cur2.toString());
         processRecord3.setAreaName("局级");
         htglProcessRecordService.insert(processRecord3);
+
+
+        HtglContract ContractForOpinion = htglContractService.selectOne(new EntityWrapper<HtglContract>()
+                .eq("id", cid));
+
+        HtglOpinion htglOpinion = new HtglOpinion();
+        htglOpinion.setContractId(Integer.parseInt(cid));
+        htglOpinion.setIsPassed("1");
+        htglOpinion.setPersonId(ContractForOpinion.getOperatorId());
+        htglOpinion.setPersonName(ContractForOpinion.getOperatorName());
+        htglOpinion.setInputTime(new Date());
+        htglOpinion.setAreaName(ContractForOpinion.getSponsorName());
+        htglOpinion.setOpinionContent(opinionContent);
+
+        htglOpinionService.insert(htglOpinion);
 
 
 
