@@ -63,8 +63,11 @@
             <td th:text="${contract.operatorName}"></td>
             <td th:text="${#dates.format(contract.draftTime, 'yyyy-MM-dd')}"></td>
             <td>
-                <div class="btn-group">
-                    <a th:href="@{/signContract(id=${contract.id})}" class="btn btn-danger">签订</a>
+                <div th:if="${contract.flowStatus == '2'}" class="btn-group">
+                    <a th:href="@{/toSignContractPage(cid=${contract.id})}" class="btn btn-danger">签订</a>
+                </div>
+                <div th:if="${contract.flowStatus == '3'}" class="btn-group">
+                    <a th:href="@{/toHtqcDetail(cid=${contract.id})}" class="btn btn-primary">查询</a>
                 </div>
             </td>
 

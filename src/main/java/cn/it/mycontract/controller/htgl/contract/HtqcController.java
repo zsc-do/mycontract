@@ -1,13 +1,8 @@
 package cn.it.mycontract.controller.htgl.contract;
 
 
-import cn.it.mycontract.entity.HtglContract;
-import cn.it.mycontract.entity.HtglContractPartener;
-import cn.it.mycontract.entity.SysArea;
-import cn.it.mycontract.entity.SysUser;
-import cn.it.mycontract.service.HtglContractPartenerService;
-import cn.it.mycontract.service.HtglContractService;
-import cn.it.mycontract.service.SysAreaService;
+import cn.it.mycontract.entity.*;
+import cn.it.mycontract.service.*;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
@@ -19,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import java.text.ParseException;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -33,14 +29,98 @@ import javax.validation.Valid;
 public class HtqcController {
 
     @Autowired
-    HtglContractService htglContractService;
+    public HtglContractService htglContractService;
 
+
+    @Autowired
+    SysAreaService sysAreaService;
+
+
+    @Autowired
+    SysUserService sysUserService;
+
+
+    @Autowired
+    HtglProcessRecordService htglProcessRecordService;
 
     @Autowired
     HtglContractPartenerService htglContractPartenerService;
 
-    @Autowired
-    SysAreaService sysAreaService;
+
+
+    @RequestMapping("/queryHtqcPageList")
+    public String queryHtqcPageList(HttpServletRequest request,Model model){
+
+
+        HttpSession session = request.getSession();
+        SysUser sysUser = (SysUser) session.getAttribute("sysUser");
+
+        List<HtglContract> htglContracts = htglContractService.selectList(new EntityWrapper<HtglContract>()
+                .eq("operator_id",sysUser.getId()));
+
+
+        model.addAttribute("contracts",htglContracts);
+
+
+        return "contract/htqc/htqc-query";
+
+    }
+
+
+    @RequestMapping("/toHtqcAdd")
+    public String toHtqcAdd(Model model,HttpServletRequest request){
+        HttpSession session = request.getSession();
+        SysUser sysUser = (SysUser) session.getAttribute("sysUser");
+
+        SysUser user = sysUserService.selectUserAndArea(sysUser.getId());
+
+        model.addAttribute("user",user);
+
+
+        return "contract/htqc/htqc-add";
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/getAllLeader")
+    public List<SysArea> getAllLeader(HttpServletRequest request){
+
+        HttpSession session = request.getSession();
+        SysUser sysUser = (SysUser) session.getAttribute("sysUser");
+
+        SysArea sysArea = htglContractService.selectLeader(sysUser.getAccount());
+
+
+        List<SysArea> nextLeaders = new ArrayList<SysArea>();
+        nextLeaders.add(sysArea);
+
+
+        return nextLeaders;
+    }
+
+    @ResponseBody
+    @RequestMapping("/getRecieveArea")
+    public List<SysArea> getRecieveArea(){
+
+        List<SysArea> sysAreas = sysAreaService.selectList(new EntityWrapper<SysArea>()
+                .eq("name", "法规处")
+                .or()
+                .eq("name", "财务处"));
+
+
+        return sysAreas;
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/getBoss")
+    public List<SysUser> getBoss(){
+
+        List<SysUser> sysUsers = sysUserService.selectBoss();
+
+        return sysUsers;
+    }
+
 
 
 
@@ -140,7 +220,7 @@ public class HtqcController {
 
 
     /*
-    * 前往合同被退回后重新起草页面
+    * 前往合同被退回后修改页面
     * */
     @RequestMapping("/toHtqcEdit")
     public String toHtqcEdit(@RequestParam("cid") String cid,
@@ -160,6 +240,65 @@ public class HtqcController {
         return "contract/htqc/htqc-edit";
     }
 
+
+    @RequestMapping("updateContract")
+    public String updateContract(@RequestParam("cid") String cid,
+                                 @RequestParam("leaderId") String leaderId,
+                                 @RequestParam("departmentsId") String departmentsId,
+                                 @RequestParam("bossId") String bossId){
+
+        //修改附件代码
+        //······
+
+
+
+        HtglContract htglContract = new HtglContract();
+        htglContract.setFlowStatus("1");
+
+        htglContractService.update(htglContract,new EntityWrapper<HtglContract>()
+                .eq("id",cid));
+
+
+        HtglProcessRecord processRecord1 = new HtglProcessRecord();
+        processRecord1.setContractId(Integer.parseInt(cid));
+        processRecord1.setNowHandler(Integer.parseInt(leaderId));
+        processRecord1.setStatus("1");
+        processRecord1.setDelSort("1");
+        htglProcessRecordService.insert(processRecord1);
+
+
+        String[] departmentIdSplit = departmentsId.split(",");
+
+
+        Integer cur2 = 2;
+        for (String deptId : departmentIdSplit){
+            SysArea sysArea = sysAreaService.selectList(new EntityWrapper<SysArea>()
+                    .eq("id", deptId)).get(0);
+
+            HtglProcessRecord processRecord2 = new HtglProcessRecord();
+            processRecord2.setContractId(Integer.parseInt(cid));
+            processRecord2.setNowHandler(sysArea.getLeaderId());
+            processRecord2.setStatus("0");
+            processRecord2.setDelSort(cur2.toString());
+            htglProcessRecordService.insert(processRecord2);
+
+            cur2 ++;
+        }
+
+
+
+
+        HtglProcessRecord processRecord3 = new HtglProcessRecord();
+        processRecord3.setContractId(Integer.parseInt(cid));
+        processRecord3.setNowHandler(Integer.parseInt(bossId));
+        processRecord3.setStatus("0");
+        processRecord3.setDelSort(cur2.toString());
+        htglProcessRecordService.insert(processRecord3);
+
+
+
+        return "redirect:/queryHtqcPageList";
+    }
 
     @ResponseBody
     @RequestMapping("/getMatchLeader")

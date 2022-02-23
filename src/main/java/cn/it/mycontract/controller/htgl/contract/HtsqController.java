@@ -57,8 +57,16 @@ public class HtsqController {
     }
 
 
+
+
     @RequestMapping("/auditPass")
-    public String auditPass(@RequestParam("id") String id, HttpServletRequest request){
+    public String auditPass(@RequestParam("id") String id,
+                            @RequestParam("methodId") String methodId,
+                            HttpServletRequest request){
+
+        if (!"2".equals(methodId)){
+            returnContract(id);
+        }
 
         HttpSession session = request.getSession();
         SysUser sysUser = (SysUser) session.getAttribute("sysUser");

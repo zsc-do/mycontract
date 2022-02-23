@@ -4,23 +4,23 @@
     <meta charset="UTF-8">
     <title>Title</title>
 
-    <link href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/css/bootstrap.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/css/bootstrap-select.min.css">
-    <script src="https://cdn.staticfile.org/jquery/3.2.1/jquery.js"></script>
-    <script src="https://cdn.staticfile.org/twitter-bootstrap/3.3.0/js/bootstrap.js"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.12.4/js/bootstrap-select.min.js"></script>
+    <script type="text/javascript" th:src="@{/js/jquery-3.5.1.min.js}"></script>
+    <script type="text/javascript" th:src="@{/js/bootstrap.min.js}"></script>
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}">
+
+    <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap-select.min.css}">
+    <script type="text/javascript" th:src="@{/js/bootstrap-select.js}"></script>
 </head>
 
 <body>
 
 <div class="panel panel-default">
     <div class="panel-heading">
-        <h3 class="panel-title">修改合同</h3>
+        <h3 class="panel-title">合同签订</h3>
     </div>
         <div class="panel-body">
-            <form th:action="@{/updateContract}">
-                <input type="text" th:value="${contract.id}" name="cid" style="display: none">
-
+            <form th:action="@{/signContract}">
+                <input type="text" th:value="${contract.id}" name="id" style="display: none">
 
                 <fieldset disabled>
                     <div class="form-group">
@@ -63,24 +63,27 @@
                             <input th:value="${contractPartener.partenerName}" type="text" name="partenerName" class="partnerType form-control"/>
                         </div>
                     </div>
-                </fieldset>
+
 
 
                     <div class="form-group">
                         <label>请选择下一步流程(部门领导审核):</label>
-                        <select  class=" form-control leader-select" name="leaderId">
+                        <select class=" form-control leader-select" name="leaderId">
                         </select>
                     </div>
                     <div class="form-group">
                         <label>请选择审签流程(收件部门):</label>
-                        <select  class="selectpicker form-control department-select" multiple name="departmentsId">
+                        <select class="selectpicker form-control department-select" multiple name="departmentsId">
                         </select>
                     </div>
                     <div class="form-group">
                         <label>请选择局领导审批流程(请选择部门分管领导):</label>
-                        <select  class="form-control boss-select"  name="bossId">
+                        <select class="form-control boss-select"  name="bossId">
                         </select>
                     </div>
+                </fieldset>
+
+
 
                 <button type="submit" id="submitBtn" class="btn btn-default">提交</button>
             </form>
@@ -121,12 +124,9 @@
                 optionNode.setAttribute("value",result[i].leaderId);
                 optionNode.innerText = result[i].leaderName;
 
+
                 leaderSelect.appendChild(optionNode);
-
-
             }
-
-
         }
     });
 
@@ -178,7 +178,6 @@
             }
         }
     });
-
 
 
 

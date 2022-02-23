@@ -63,13 +63,6 @@
             <td th:text="${contract.operatorName}"></td>
             <td th:text="${#dates.format(contract.draftTime, 'yyyy-MM-dd')}"></td>
             <td>
-                <!--<div class="btn-group">-->
-                    <!--<a th:href="@{/auditPass(id=${contract.id})}" class="btn btn-danger">通过</a>-->
-                <!--</div>-->
-                <!--<div class="btn-group">-->
-                    <!--<a th:href="@{/returnContract(id=${contract.id})}" class="btn btn-danger">退回</a>-->
-                <!--</div>-->
-
                 <div class="btn-group dealBtnGroup">
                     <a th:each="record: ${contract.htglProcessRecordList}" th:if="${record.status == '2'}"
                        th:href="@{/toHtqcDetail(cid=${contract.id})}" class="btn btn-primary dealBtn">查询</a>

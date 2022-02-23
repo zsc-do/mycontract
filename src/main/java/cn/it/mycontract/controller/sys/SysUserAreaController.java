@@ -1,4 +1,4 @@
-package cn.it.mycontract.controller;
+package cn.it.mycontract.controller.sys;
 
 
 import org.springframework.web.bind.annotation.RequestMapping;
