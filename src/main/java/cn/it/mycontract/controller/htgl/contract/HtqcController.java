@@ -174,13 +174,6 @@ public class HtqcController {
         try {
             contractDraftTime = sdf1.parse(htglContractVo.getDraftTime());
 
-            //利用Calendar 实现 Date日期+1天
-            Calendar c = Calendar.getInstance();
-            c.setTime(contractDraftTime);
-            c.add(Calendar.DAY_OF_MONTH, 1);
-
-            contractDraftTime = c.getTime();
-
         } catch (ParseException e) {
             e.printStackTrace();
         }
@@ -190,7 +183,7 @@ public class HtqcController {
 
         htglContractService.saveHtqc(htglContract,htglContractVo.getPartenerName(),
                 htglContractVo.getLeaderId(),htglContractVo.getDepartmentsId(),
-                htglContractVo.getBossId());
+                htglContractVo.getBossId(),sysArea);
 
 
 
@@ -245,10 +238,12 @@ public class HtqcController {
     public String updateContract(@RequestParam("cid") String cid,
                                  @RequestParam("leaderId") String leaderId,
                                  @RequestParam("departmentsId") String departmentsId,
-                                 @RequestParam("bossId") String bossId){
+                                 @RequestParam("bossId") String bossId,
+                                 @RequestParam("sponsorId") String sponsorId){
 
         //修改附件代码
         //······
+
 
 
 
@@ -259,11 +254,15 @@ public class HtqcController {
                 .eq("id",cid));
 
 
+        SysArea userArea = sysAreaService.selectOne(new EntityWrapper<SysArea>()
+                .eq("id", sponsorId));
+
         HtglProcessRecord processRecord1 = new HtglProcessRecord();
         processRecord1.setContractId(Integer.parseInt(cid));
         processRecord1.setNowHandler(Integer.parseInt(leaderId));
         processRecord1.setStatus("1");
         processRecord1.setDelSort("1");
+        processRecord1.setAreaName(userArea.getName());
         htglProcessRecordService.insert(processRecord1);
 
 
@@ -280,6 +279,7 @@ public class HtqcController {
             processRecord2.setNowHandler(sysArea.getLeaderId());
             processRecord2.setStatus("0");
             processRecord2.setDelSort(cur2.toString());
+            processRecord2.setAreaName(sysArea.getName());
             htglProcessRecordService.insert(processRecord2);
 
             cur2 ++;
@@ -293,6 +293,7 @@ public class HtqcController {
         processRecord3.setNowHandler(Integer.parseInt(bossId));
         processRecord3.setStatus("0");
         processRecord3.setDelSort(cur2.toString());
+        processRecord3.setAreaName("局级");
         htglProcessRecordService.insert(processRecord3);
 
 

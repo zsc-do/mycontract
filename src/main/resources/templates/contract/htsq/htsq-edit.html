@@ -65,7 +65,6 @@
                     </div>
 
 
-
                     <div class="form-group">
                         <label>请选择下一步流程(部门领导审核):</label>
                         <select class=" form-control leader-select" name="leaderId">
@@ -81,7 +80,22 @@
                         <select class="form-control boss-select"  name="bossId">
                         </select>
                     </div>
+
+                    <div class="form-group">
+                        <label>业务意见:</label>
+                        <ul class="list-group opinion-group">
+                        </ul>
+                    </div>
                 </fieldset>
+
+
+
+
+                <div class="form-group">
+                    <label>填写意见:</label>
+                    <textarea class="form-control" rows="3" name="opinionContent"></textarea>
+
+                </div>
 
                 <div class="form-group">
                     <label>请选择处理方式:</label>
@@ -116,6 +130,43 @@
     let departmentSelect = document.getElementsByClassName('department-select')[0];
 
     let bossSelect = document.getElementsByClassName('boss-select')[0];
+
+
+
+    //获取合同的意见信息
+    let cid = [[${contract.id}]];
+    let opinionGroup= document.getElementsByClassName('opinion-group')[0];
+
+    $.ajax({
+        type: "GET",
+        url: basePath + "/getOpinions",
+        data: "cid=" + cid,//请求参数
+        dataType: "JSON",
+        success: function (result) {
+
+
+            for (let i = 0; i < result.length; i++){
+                let liNode = document.createElement('li');
+
+                if ( result[i]['isPassed'] === '1'){
+                    liNode.setAttribute("class", 'list-group-item list-group-item-info');
+                    liNode.innerText = result[i]['inputTime'] + '\n' +
+                        result[i]['areaName'] + ' ' +
+                        result[i]['personName'] + '通过' + '\n' +
+                        result[i]['opinionContent'];
+                } else {
+                    liNode.setAttribute("class", 'list-group-item list-group-item-danger');
+                    liNode.innerText = result[i]['inputTime'] + '\n' + '退回' + '\n' +
+                        result[i]['areaName'] + '\n' +
+                        result[i]['personName'] + '\n' +
+                        result[i]['opinionContent'];
+                }
+
+                opinionGroup.appendChild(liNode);
+            }
+        }
+    });
+
 
 
     $.ajax({

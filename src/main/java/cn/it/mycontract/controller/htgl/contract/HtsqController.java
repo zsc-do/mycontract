@@ -1,10 +1,7 @@
 package cn.it.mycontract.controller.htgl.contract;
 
 
-import cn.it.mycontract.entity.HtglContract;
-import cn.it.mycontract.entity.HtglContractPartener;
-import cn.it.mycontract.entity.HtglProcessRecord;
-import cn.it.mycontract.entity.SysUser;
+import cn.it.mycontract.entity.*;
 import cn.it.mycontract.service.*;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -16,6 +13,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 
 @Controller
@@ -38,6 +36,9 @@ public class HtsqController {
 
     @Autowired
     HtglContractPartenerService htglContractPartenerService;
+
+    @Autowired
+    HtglOpinionService htglOpinionService;
 
 
 
@@ -62,10 +63,13 @@ public class HtsqController {
     @RequestMapping("/auditPass")
     public String auditPass(@RequestParam("id") String id,
                             @RequestParam("methodId") String methodId,
+                            @RequestParam("opinionContent") String opinionContent,
                             HttpServletRequest request){
 
+        //退回合同
         if (!"2".equals(methodId)){
-            returnContract(id);
+            returnContract(id,opinionContent,request);
+            return "redirect:/queryHtsqPageList";
         }
 
         HttpSession session = request.getSession();
@@ -112,15 +116,50 @@ public class HtsqController {
             }
         }
 
+        HtglOpinion htglOpinion = new HtglOpinion();
+        htglOpinion.setContractId(Integer.parseInt(id));
+        htglOpinion.setIsPassed("1");
+        htglOpinion.setPersonId(sysUser.getId());
+        htglOpinion.setPersonName(sysUser.getName());
+        htglOpinion.setInputTime(new Date());
+        htglOpinion.setAreaName(tempProcessRecord.getAreaName());
+        htglOpinion.setOpinionContent(opinionContent);
+
+        htglOpinionService.insert(htglOpinion);
 
         return "redirect:/queryHtsqPageList";
     }
 
 
 
-    @RequestMapping("/returnContract")
-    public String returnContract(@RequestParam("id") String contractId){
+    public void returnContract(String contractId,String opinionContent,HttpServletRequest request){
 
+
+        HttpSession session = request.getSession();
+        SysUser sysUser = (SysUser) session.getAttribute("sysUser");
+
+
+        List<HtglProcessRecord> processRecords = htglProcessRecordService.selectList(new EntityWrapper<HtglProcessRecord>()
+                .eq("contract_id", contractId)
+                .eq("now_handler",sysUser.getId()));
+
+        HtglProcessRecord tempProcessRecord = new HtglProcessRecord();
+
+        for (HtglProcessRecord processRecord :processRecords){
+            if ("1".equals(processRecord.getStatus())){
+                tempProcessRecord = processRecord;
+                break;
+            }
+        }
+
+        HtglOpinion htglOpinion = new HtglOpinion();
+        htglOpinion.setContractId(Integer.parseInt(contractId));
+        htglOpinion.setIsPassed("0");
+        htglOpinion.setPersonId(sysUser.getId());
+        htglOpinion.setPersonName(sysUser.getName());
+        htglOpinion.setInputTime(new Date());
+        htglOpinion.setAreaName(tempProcessRecord.getAreaName());
+        htglOpinion.setOpinionContent(opinionContent);
 
 
         htglProcessRecordService.delete(new EntityWrapper<HtglProcessRecord>()
@@ -133,7 +172,12 @@ public class HtsqController {
                 .eq("id",contractId));
 
 
-        return "redirect:/queryHtsqPageList";
+
+
+
+        htglOpinionService.insert(htglOpinion);
+
+
     }
 
 

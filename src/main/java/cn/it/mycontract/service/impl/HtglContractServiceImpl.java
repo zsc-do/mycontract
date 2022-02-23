@@ -1,9 +1,6 @@
 package cn.it.mycontract.service.impl;
 
-import cn.it.mycontract.entity.HtglContract;
-import cn.it.mycontract.entity.HtglContractPartener;
-import cn.it.mycontract.entity.HtglProcessRecord;
-import cn.it.mycontract.entity.SysArea;
+import cn.it.mycontract.entity.*;
 import cn.it.mycontract.mapper.HtglContractMapper;
 import cn.it.mycontract.mapper.HtglContractPartenerMapper;
 import cn.it.mycontract.mapper.HtglProcessRecordMapper;
@@ -55,7 +52,10 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
     @Transactional
     public void saveHtqc(HtglContract htglContract,
                          String partenerName,
-                         String leaderId,String departmentsId,String bossId) {
+                         String leaderId,
+                         String departmentsId,
+                         String bossId,
+                         SysArea userArea) {
 
         htglContractMapper.insert(htglContract);
 
@@ -83,6 +83,7 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
         processRecord1.setNowHandler(Integer.parseInt(leaderId));
         processRecord1.setStatus("1");
         processRecord1.setDelSort("1");
+        processRecord1.setAreaName(userArea.getName());
         htglProcessRecordMapper.insert(processRecord1);
 
 
@@ -99,6 +100,7 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
             processRecord2.setNowHandler(sysArea.getLeaderId());
             processRecord2.setStatus("0");
             processRecord2.setDelSort(cur2.toString());
+            processRecord2.setAreaName(sysArea.getName());
             htglProcessRecordMapper.insert(processRecord2);
 
             cur2 ++;
@@ -112,6 +114,7 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
         processRecord3.setNowHandler(Integer.parseInt(bossId));
         processRecord3.setStatus("0");
         processRecord3.setDelSort(cur2.toString());
+        processRecord3.setAreaName("局级");
         htglProcessRecordMapper.insert(processRecord3);
 
 
