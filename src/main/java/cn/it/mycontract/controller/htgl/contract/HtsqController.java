@@ -9,6 +9,7 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
@@ -194,6 +195,21 @@ public class HtsqController {
         model.addAttribute("contractParteners",contractParteners);
 
         return "contract/htsq/htsq-edit";
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/getCountOfSq")
+    public Integer getCountOfSq(HttpServletRequest request){
+
+        HttpSession session = request.getSession();
+        SysUser sysUser = (SysUser) session.getAttribute("sysUser");
+
+        Integer count = htglProcessRecordService.selectCount(new EntityWrapper<HtglProcessRecord>()
+                .eq("now_handler", sysUser.getId())
+                .eq("status", "1"));
+
+        return count;
     }
 
 }

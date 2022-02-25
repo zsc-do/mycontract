@@ -14,6 +14,8 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.servlet.ModelAndView;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpSession;
 import java.util.List;
 
 /**
@@ -153,6 +155,16 @@ public class SysUserController {
         return sysUsers;
     }
 
+
+
+    @ResponseBody
+    @RequestMapping("/getUser")
+    public SysUser getUser(HttpServletRequest request){
+
+        HttpSession session = request.getSession();
+        SysUser sysUser = (SysUser) session.getAttribute("sysUser");
+        return sysUser;
+    }
 
 
 }

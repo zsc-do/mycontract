@@ -4,6 +4,7 @@ package cn.it.mycontract.controller.htgl.contract;
 import cn.it.mycontract.entity.*;
 import cn.it.mycontract.service.*;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -372,5 +373,37 @@ public class HtqcController {
 
 
         return sysAreas;
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/getCountOfQd")
+    public Integer getCountOfQd(HttpServletRequest request){
+
+        HttpSession session = request.getSession();
+        SysUser sysUser = (SysUser) session.getAttribute("sysUser");
+
+        Integer count = htglContractService.selectCount(new EntityWrapper<HtglContract>()
+                .eq("operator_id", sysUser.getId())
+                .eq("flow_status", "2"));
+
+        return count;
+
+    }
+
+
+    @ResponseBody
+    @RequestMapping("/getCountOfTh")
+    public Integer getCountOfTh(HttpServletRequest request){
+
+        HttpSession session = request.getSession();
+        SysUser sysUser = (SysUser) session.getAttribute("sysUser");
+
+        Integer count = htglContractService.selectCount(new EntityWrapper<HtglContract>()
+                .eq("operator_id", sysUser.getId())
+                .eq("flow_status", "0"));
+
+        return count;
+
     }
 }

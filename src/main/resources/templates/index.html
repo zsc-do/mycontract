@@ -59,7 +59,7 @@
     <script th:src="@{/js/index.js}"></script>
 
 
-    <script type="text/javascript">
+    <script type="text/javascript" th:inline="javascript">
         function setIframeHeight(iframe) {
             if (iframe) {
                 var iframeWin = iframe.contentWindow || iframe.contentDocument.parentWindow;
@@ -70,6 +70,22 @@
 
 
         };
+
+
+        let basePath = [[${#httpServletRequest.getContextPath()}]];
+
+        $.ajax({
+            type:"GET",
+            url:basePath + "/getUser",
+            data:"",//请求参数
+            dataType:"JSON",
+            success:function(result){
+
+
+                let elementById = document.getElementById('navBarUserName');
+                elementById.innerText = '当前用户：' + result['name']
+            }
+        });
     </script>
 
 </body>
