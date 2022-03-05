@@ -1,8 +1,10 @@
 package cn.it.mycontract.mapper;
 
 import cn.it.mycontract.entity.HtglContract;
+import cn.it.mycontract.entity.HtglProcessRecord;
 import cn.it.mycontract.entity.SysArea;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import org.apache.ibatis.annotations.Param;
 
 import java.util.List;
@@ -19,5 +21,11 @@ public interface HtglContractMapper extends BaseMapper<HtglContract> {
 
     SysArea selectLeader(@Param("account") String account);
 
-    List<HtglContract> selectHtqcRecode(Integer id);
+    List<HtglContract> selectHtqcRecode(@Param("cur") Integer cur,@Param("handlerId") Integer handlerId);
+
+    HtglProcessRecord selectHtqcRecode2(@Param("handlerId") Integer handlerId);
+
+    List<HtglContract> queryHtqcPageList(@Param("cur") Integer cur, @Param("operatorId") Integer operatorId);
+
+    List<HtglContract> queryHtqdPageList(@Param("cur") Integer cur, @Param("operatorId") Integer operatorId);
 }

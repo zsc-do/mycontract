@@ -1,5 +1,8 @@
 package cn.it.mycontract;
 
+import cn.it.mycontract.entity.HtglContract;
+import cn.it.mycontract.entity.HtglProcessRecord;
+import cn.it.mycontract.mapper.HtglContractMapper;
 import com.baomidou.mybatisplus.enums.IdType;
 import com.baomidou.mybatisplus.generator.AutoGenerator;
 import com.baomidou.mybatisplus.generator.config.DataSourceConfig;
@@ -16,6 +19,7 @@ import org.springframework.boot.test.context.SpringBootTest;
 import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.SQLException;
+import java.util.List;
 
 @SpringBootTest
 class MycontractApplicationTests {
@@ -23,11 +27,18 @@ class MycontractApplicationTests {
 	@Autowired
 	DataSource dataSource;
 
+
+	@Autowired
+	HtglContractMapper htglContractMapper;
+
 	@Test
 	public void test02() throws SQLException {
 
-		Connection connection = dataSource.getConnection();
-		System.out.println(connection);
+		List<HtglContract> htglContractList = htglContractMapper.selectHtqcRecode(1, 2);
+
+		System.out.println(htglContractList);
+
+
 	}
 
 

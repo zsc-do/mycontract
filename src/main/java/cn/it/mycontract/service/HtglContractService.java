@@ -3,6 +3,7 @@ package cn.it.mycontract.service;
 import cn.it.mycontract.entity.HtglContract;
 import cn.it.mycontract.entity.SysArea;
 import cn.it.mycontract.entity.SysUser;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.IService;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -29,6 +30,10 @@ public interface HtglContractService extends IService<HtglContract> {
                   String opinionContent,
                   MultipartFile file);
 
-    List<HtglContract> selectHtqcRecode(Integer id);
+    List<HtglContract> selectHtqcRecode(Integer cur,Integer handlerId);
+
+    List<HtglContract> queryHtqcPageList(Integer cur, Integer operatorId);
+
+    List<HtglContract> queryHtqdPageList(Integer cur, Integer operatorId);
 
 }

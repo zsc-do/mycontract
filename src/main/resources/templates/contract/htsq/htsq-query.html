@@ -55,7 +55,7 @@
         </tr>
         </thead>
         <tbody>
-        <tr th:if="${contracts != null}" th:each="contract ,index: ${contracts}">
+        <tr th:if="${contracts != null && contract.htglProcessRecordList.size()!=0}" th:each="contract ,index: ${contracts}">
             <td th:text="${index.count}"></td>
             <td th:text="${contract.name}"></td>
             <td th:text="${contract.contractMoney}"></td>
@@ -78,6 +78,15 @@
 
         </tbody>
     </table>
+
+    <nav aria-label="...">
+        <ul class="pager">
+            <li th:if="${cur == 1}" class="disabled"><a href="#">上一页</a></li>
+
+            <li th:if="${cur != 1}"><a th:href="@{/queryHtsqPageList(cur=${cur} - 1)}">上一页</a></li>
+            <li><a th:href="@{/queryHtsqPageList(cur=${cur} + 1)}">下一页</a></li>
+        </ul>
+    </nav>
 
 
 </div>

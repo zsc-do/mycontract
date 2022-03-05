@@ -3,8 +3,9 @@ package cn.it.mycontract.controller.htgl.contract;
 
 import cn.it.mycontract.entity.*;
 import cn.it.mycontract.service.*;
+import cn.it.mycontract.vo.htglContractVo;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
-import org.aspectj.weaver.ast.Var;
+import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -12,20 +13,20 @@ import org.springframework.validation.BindingResult;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
-
-import java.io.File;
-import java.io.IOException;
-import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.*;
-
-import cn.it.mycontract.vo.htglContractVo;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 import javax.validation.Valid;
+import java.io.File;
+import java.io.IOException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.ArrayList;
+import java.util.Date;
+import java.util.List;
+import java.util.UUID;
 
 @Controller
 public class HtqcController {
@@ -57,17 +58,24 @@ public class HtqcController {
 
 
     @RequestMapping("/queryHtqcPageList")
-    public String queryHtqcPageList(HttpServletRequest request,Model model){
+    public String queryHtqcPageList(HttpServletRequest request,Model model,
+                                    @RequestParam(value="cur",required=false,defaultValue="1") Integer cur){
 
 
         HttpSession session = request.getSession();
         SysUser sysUser = (SysUser) session.getAttribute("sysUser");
 
-        List<HtglContract> htglContracts = htglContractService.selectList(new EntityWrapper<HtglContract>()
-                .eq("operator_id",sysUser.getId()));
+
+
+
+
+        List<HtglContract> htglContracts = htglContractService.queryHtqcPageList((cur-1)*10,sysUser.getId());
 
 
         model.addAttribute("contracts",htglContracts);
+
+        model.addAttribute("cur",cur);
+
 
 
         return "contract/htqc/htqc-query";

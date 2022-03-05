@@ -21,10 +21,18 @@
         <result column="flow_status" property="flowStatus"/>
 
 
-        <collection property="htglProcessRecordList" ofType="cn.it.mycontract.entity.HtglProcessRecord">
+        <collection property="htglProcessRecordList" ofType="cn.it.mycontract.entity.HtglProcessRecord"
+                    select="cn.it.mycontract.mapper.HtglContractMapper.selectHtqcRecode2"
+                    column="{contractId=id,handlerId=handlerId}">
             <id column="record_id" property="id"/>
             <result column="record_status" property="status"></result>
         </collection>
+    </resultMap>
+
+
+    <resultMap id="HtqcRecode2Map" type="cn.it.mycontract.entity.HtglProcessRecord">
+        <id column="record_id" property="id"/>
+        <result column="record_status" property="status"></result>
     </resultMap>
 
 
@@ -51,14 +59,45 @@ WHERE
 
     <select id="selectHtqcRecode" resultMap="ContractResult">
         SELECT
-        hc.*,
-        hpr.id as record_id,
-        hpr.`status` as record_status
+         DISTINCT hc.id,
+         hc.*,
+         hpr.`status`,
+          hc.draft_time,
+        case when (${handlerId} IS NULL) then NULL else ${handlerId} end as handlerId
     FROM
         htgl_contract hc
         LEFT JOIN htgl_process_record hpr ON hc.id = hpr.contract_id
     WHERE
-        hpr.now_handler = #{id}
+        hpr.now_handler = #{handlerId}
         AND hpr.`status` != 0
+    ORDER BY hpr.`status`,hc.draft_time desc
+    limit ${cur} , 10
+    </select>
+    
+    
+    <select id="selectHtqcRecode2" resultMap="HtqcRecode2Map">
+        select hpr.id as record_id,
+               hpr.status as record_status
+        FROM htgl_process_record hpr
+        where  hpr.`status` != 0 and contract_id=#{contractId}
+               and hpr.now_handler = #{handlerId}
+    </select>
+
+
+    <select id="queryHtqcPageList" resultType="cn.it.mycontract.entity.HtglContract">
+        select *
+        from htgl_contract hc
+        where hc.operator_id = #{operatorId}
+        order by hc.flow_status,hc.draft_time desc
+        limit #{cur},10
+    </select>
+
+
+    <select id="queryHtqdPageList" resultType="cn.it.mycontract.entity.HtglContract">
+        select *
+        from htgl_contract hc
+        where hc.operator_id = #{operatorId} and (hc.flow_status=2 or hc.flow_status=3)
+        order by hc.flow_status asc,hc.draft_time desc
+        limit #{cur},10
     </select>
 </mapper>

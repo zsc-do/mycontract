@@ -5,6 +5,7 @@ import cn.it.mycontract.mapper.*;
 import cn.it.mycontract.service.HtglContractService;
 import cn.it.mycontract.service.HtglOpinionService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
 import org.aspectj.weaver.ast.Var;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -176,9 +177,25 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
 
 
     @Override
-    public List<HtglContract> selectHtqcRecode(Integer id) {
+    public List<HtglContract> selectHtqcRecode(Integer cur,Integer handlerId) {
 
-        List<HtglContract> htglContractList = htglContractMapper.selectHtqcRecode(id);
+        List<HtglContract> htglContractList = htglContractMapper.selectHtqcRecode(cur,handlerId);
+
+        return htglContractList;
+    }
+
+    @Override
+    public List<HtglContract> queryHtqcPageList(Integer cur, Integer operatorId) {
+
+        List<HtglContract> htglContractList = htglContractMapper.queryHtqcPageList(cur,operatorId);
+
+        return htglContractList;
+    }
+
+    @Override
+    public List<HtglContract> queryHtqdPageList(Integer cur, Integer operatorId) {
+        List<HtglContract> htglContractList = htglContractMapper.queryHtqdPageList(cur,operatorId);
+
         return htglContractList;
     }
 

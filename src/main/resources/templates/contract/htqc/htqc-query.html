@@ -80,6 +80,14 @@
         </tbody>
     </table>
 
+    <nav aria-label="...">
+        <ul class="pager">
+            <li th:if="${cur == 1}" class="disabled"><a href="#">上一页</a></li>
+
+            <li th:if="${cur != 1}"><a th:href="@{/queryHtqcPageList(cur=${cur} - 1)}">上一页</a></li>
+            <li><a th:href="@{/queryHtqcPageList(cur=${cur} + 1)}">下一页</a></li>
+        </ul>
+    </nav>
 
 </div>
 

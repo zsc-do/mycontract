@@ -4,6 +4,7 @@ package cn.it.mycontract.controller.htgl.contract;
 import cn.it.mycontract.entity.*;
 import cn.it.mycontract.service.*;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
+import com.baomidou.mybatisplus.plugins.Page;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -46,14 +47,18 @@ public class HtsqController {
 
     @RequestMapping("/queryHtsqPageList")
     public String queryHtsqPageList(HttpServletRequest request,
-                                    Model model){
+                                    Model model,
+                                    @RequestParam(value="cur",required=false,defaultValue="1") Integer cur){
 
         HttpSession session = request.getSession();
         SysUser sysUser = (SysUser) session.getAttribute("sysUser");
 
-        List<HtglContract> htglContractList = htglContractService.selectHtqcRecode(sysUser.getId());
+
+
+        List<HtglContract> htglContractList = htglContractService.selectHtqcRecode((cur-1)*10,sysUser.getId());
 
         model.addAttribute("contracts",htglContractList);
+        model.addAttribute("cur",cur);
 
         return "contract/htsq/htsq-query";
     }
