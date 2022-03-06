@@ -34,9 +34,9 @@ class MycontractApplicationTests {
 	@Test
 	public void test02() throws SQLException {
 
-		List<HtglContract> htglContractList = htglContractMapper.selectHtqcRecode(1, 2);
-
-		System.out.println(htglContractList);
+//		List<HtglContract> htglContractList = htglContractMapper.selectHtqcRecode(1, 2);
+//
+//		System.out.println(htglContractList);
 
 
 	}

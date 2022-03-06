@@ -52,12 +52,18 @@
 
         },
         series:[{
+            itemStyle: {
+                normal: {
+                    color: function(params) {
+                        var colorList = ['#c23531','#2f4554', '#61a0a8'];
+                        return colorList[params.dataIndex]
+                    }
+                }
+            },
             name:'数量',
-            type:'line',
-            data:[0,0,0],
-            areaStyle: {
-                normal: {color: '#7c7eff'}
-            }
+            type:'bar',
+            barWidth:'70',
+            data:[0,0,0]
         }]
     };
 

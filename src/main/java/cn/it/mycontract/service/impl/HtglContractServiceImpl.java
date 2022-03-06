@@ -177,24 +177,24 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
 
 
     @Override
-    public List<HtglContract> selectHtqcRecode(Integer cur,Integer handlerId) {
+    public List<HtglContract> selectHtqcRecode(Integer cur,Integer handlerId,String contractName) {
 
-        List<HtglContract> htglContractList = htglContractMapper.selectHtqcRecode(cur,handlerId);
-
-        return htglContractList;
-    }
-
-    @Override
-    public List<HtglContract> queryHtqcPageList(Integer cur, Integer operatorId) {
-
-        List<HtglContract> htglContractList = htglContractMapper.queryHtqcPageList(cur,operatorId);
+        List<HtglContract> htglContractList = htglContractMapper.selectHtqcRecode(cur,handlerId,contractName);
 
         return htglContractList;
     }
 
     @Override
-    public List<HtglContract> queryHtqdPageList(Integer cur, Integer operatorId) {
-        List<HtglContract> htglContractList = htglContractMapper.queryHtqdPageList(cur,operatorId);
+    public List<HtglContract> queryHtqcPageList(Integer cur, Integer operatorId,String contractName) {
+
+        List<HtglContract> htglContractList = htglContractMapper.queryHtqcPageList(cur,operatorId,contractName);
+
+        return htglContractList;
+    }
+
+    @Override
+    public List<HtglContract> queryHtqdPageList(Integer cur, Integer operatorId,String contractName) {
+        List<HtglContract> htglContractList = htglContractMapper.queryHtqdPageList(cur,operatorId,contractName);
 
         return htglContractList;
     }

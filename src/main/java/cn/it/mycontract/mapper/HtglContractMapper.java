@@ -21,11 +21,14 @@ public interface HtglContractMapper extends BaseMapper<HtglContract> {
 
     SysArea selectLeader(@Param("account") String account);
 
-    List<HtglContract> selectHtqcRecode(@Param("cur") Integer cur,@Param("handlerId") Integer handlerId);
+    List<HtglContract> selectHtqcRecode(@Param("cur") Integer cur,@Param("handlerId") Integer handlerId,
+                                        @Param("contractName") String contractName);
 
     HtglProcessRecord selectHtqcRecode2(@Param("handlerId") Integer handlerId);
 
-    List<HtglContract> queryHtqcPageList(@Param("cur") Integer cur, @Param("operatorId") Integer operatorId);
+    List<HtglContract> queryHtqcPageList(@Param("cur") Integer cur, @Param("operatorId") Integer operatorId,
+                                         @Param("contractName") String contractName);
 
-    List<HtglContract> queryHtqdPageList(@Param("cur") Integer cur, @Param("operatorId") Integer operatorId);
+    List<HtglContract> queryHtqdPageList(@Param("cur") Integer cur, @Param("operatorId") Integer operatorId,
+                                         @Param("contractName") String contractName);
 }

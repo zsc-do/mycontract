@@ -48,14 +48,16 @@ public class HtsqController {
     @RequestMapping("/queryHtsqPageList")
     public String queryHtsqPageList(HttpServletRequest request,
                                     Model model,
-                                    @RequestParam(value="cur",required=false,defaultValue="1") Integer cur){
+                                    @RequestParam(value="cur",required=false,defaultValue="1") Integer cur,
+                                    @RequestParam(value="contractName",required=false) String contractName,
+                                    @RequestParam(value="flowStatus",required=false) String flowStatus){
 
         HttpSession session = request.getSession();
         SysUser sysUser = (SysUser) session.getAttribute("sysUser");
 
 
 
-        List<HtglContract> htglContractList = htglContractService.selectHtqcRecode((cur-1)*10,sysUser.getId());
+        List<HtglContract> htglContractList = htglContractService.selectHtqcRecode((cur-1)*10,sysUser.getId(),contractName);
 
         model.addAttribute("contracts",htglContractList);
         model.addAttribute("cur",cur);

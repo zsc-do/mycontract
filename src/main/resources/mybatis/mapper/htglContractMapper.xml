@@ -67,9 +67,15 @@ WHERE
     FROM
         htgl_contract hc
         LEFT JOIN htgl_process_record hpr ON hc.id = hpr.contract_id
-    WHERE
-        hpr.now_handler = #{handlerId}
-        AND hpr.`status` != 0
+        <trim prefix="where" prefixOverrides="and">
+            <if test="contractName != null and !contractName.equals('')">
+                hc.name LIKE CONCAT('%', #{contractName}, '%')
+            </if>
+            <if test="handlerId != null">
+                and hpr.now_handler = #{handlerId}
+                AND hpr.`status` != 0
+            </if>
+        </trim>
     ORDER BY hpr.`status`,hc.draft_time desc
     limit ${cur} , 10
     </select>
@@ -87,7 +93,14 @@ WHERE
     <select id="queryHtqcPageList" resultType="cn.it.mycontract.entity.HtglContract">
         select *
         from htgl_contract hc
-        where hc.operator_id = #{operatorId}
+        <trim prefix="where" prefixOverrides="and">
+            <if test="contractName!=null and !contractName.equals('')">
+                hc.name LIKE CONCAT('%', #{contractName}, '%')
+            </if>
+            <if test="operatorId!=null">
+                and hc.operator_id = #{operatorId}
+            </if>
+        </trim>
         order by hc.flow_status,hc.draft_time desc
         limit #{cur},10
     </select>
@@ -96,7 +109,14 @@ WHERE
     <select id="queryHtqdPageList" resultType="cn.it.mycontract.entity.HtglContract">
         select *
         from htgl_contract hc
-        where hc.operator_id = #{operatorId} and (hc.flow_status=2 or hc.flow_status=3)
+        <trim prefix="where" prefixOverrides="and">
+            <if test="contractName!=null and !contractName.equals('')">
+                hc.name LIKE CONCAT('%', #{contractName}, '%')
+            </if>
+            <if test="operatorId!=null">
+                and hc.operator_id = #{operatorId} and (hc.flow_status=2 or hc.flow_status=3)
+            </if>
+        </trim>
         order by hc.flow_status asc,hc.draft_time desc
         limit #{cur},10
     </select>

@@ -59,7 +59,8 @@ public class HtqcController {
 
     @RequestMapping("/queryHtqcPageList")
     public String queryHtqcPageList(HttpServletRequest request,Model model,
-                                    @RequestParam(value="cur",required=false,defaultValue="1") Integer cur){
+                                    @RequestParam(value="cur",required=false,defaultValue="1") Integer cur,
+                                    @RequestParam(value="contractName",required=false) String contractName){
 
 
         HttpSession session = request.getSession();
@@ -69,7 +70,7 @@ public class HtqcController {
 
 
 
-        List<HtglContract> htglContracts = htglContractService.queryHtqcPageList((cur-1)*10,sysUser.getId());
+        List<HtglContract> htglContracts = htglContractService.queryHtqcPageList((cur-1)*10,sysUser.getId(),contractName);
 
 
         model.addAttribute("contracts",htglContracts);

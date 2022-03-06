@@ -30,10 +30,10 @@ public interface HtglContractService extends IService<HtglContract> {
                   String opinionContent,
                   MultipartFile file);
 
-    List<HtglContract> selectHtqcRecode(Integer cur,Integer handlerId);
+    List<HtglContract> selectHtqcRecode(Integer cur,Integer handlerId,String contractName);
 
-    List<HtglContract> queryHtqcPageList(Integer cur, Integer operatorId);
+    List<HtglContract> queryHtqcPageList(Integer cur, Integer operatorId,String contractName);
 
-    List<HtglContract> queryHtqdPageList(Integer cur, Integer operatorId);
+    List<HtglContract> queryHtqdPageList(Integer cur, Integer operatorId,String contractName);
 
 }

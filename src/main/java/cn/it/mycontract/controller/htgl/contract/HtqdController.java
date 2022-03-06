@@ -42,14 +42,15 @@ public class HtqdController {
     @RequestMapping("/queryHtqdPageList")
     public String queryHtqdPageList( HttpServletRequest request,
                                      Model model,
-                                     @RequestParam(value="cur",required=false,defaultValue="1") Integer cur){
+                                     @RequestParam(value="cur",required=false,defaultValue="1") Integer cur,
+                                     @RequestParam(value="contractName",required=false) String contractName){
 
 
         HttpSession session = request.getSession();
         SysUser sysUser = (SysUser) session.getAttribute("sysUser");
 
 
-        List<HtglContract> htglContracts = htglContractService.queryHtqdPageList((cur-1)*10,sysUser.getId());
+       List<HtglContract> htglContracts = htglContractService.queryHtqdPageList((cur-1)*10,sysUser.getId(),contractName);
 
 
 
