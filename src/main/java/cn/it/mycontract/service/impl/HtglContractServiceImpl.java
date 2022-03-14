@@ -4,6 +4,7 @@ import cn.it.mycontract.entity.*;
 import cn.it.mycontract.mapper.*;
 import cn.it.mycontract.service.HtglContractService;
 import cn.it.mycontract.service.HtglOpinionService;
+import cn.it.mycontract.service.SysUserService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import com.baomidou.mybatisplus.service.impl.ServiceImpl;
@@ -50,6 +51,10 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
     @Autowired
     HtglFileMapper htglFileMapper;
 
+
+    @Autowired
+    SysUserMapper sysUserMapper;
+
     @Override
     public SysArea selectLeader(String account) {
 
@@ -89,6 +94,7 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
 
 
 
+        //经办处配置
         HtglProcessRecord processRecord1 = new HtglProcessRecord();
         processRecord1.setContractId(htglContract.getId());
         processRecord1.setNowHandler(Integer.parseInt(leaderId));
@@ -101,10 +107,31 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
         String[] departmentIdSplit = departmentsId.split(",");
 
 
+
+
+
         Integer cur2 = 2;
         for (String deptId : departmentIdSplit){
             SysArea sysArea = sysAreaMapper.selectList(new EntityWrapper<SysArea>()
                     .eq("id", deptId)).get(0);
+
+
+            List<SysUser> sysCSUsers = sysUserMapper.selectCSUser(sysArea.getName());
+
+            if (sysCSUsers != null){
+                for (SysUser sysCSUser : sysCSUsers){
+                    HtglProcessRecord processRecord = new HtglProcessRecord();
+                    processRecord.setContractId(htglContract.getId());
+                    processRecord.setNowHandler(sysCSUser.getId());
+                    processRecord.setStatus("0");
+                    processRecord.setDelSort(cur2.toString());
+                    processRecord.setAreaName(sysArea.getName());
+                    htglProcessRecordMapper.insert(processRecord);
+
+                    cur2 ++;
+                }
+            }
+
 
             HtglProcessRecord processRecord2 = new HtglProcessRecord();
             processRecord2.setContractId(htglContract.getId());
@@ -157,7 +184,7 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
             houZui = file.getOriginalFilename().substring(pos);
         }
 
-        String filePath = "D:\\contractUpload\\"+uuid + houZui;
+        String filePath = "D:\\contractUpload\\htzw\\"+uuid + houZui;
 
         try {
             file.transferTo(new File(filePath));

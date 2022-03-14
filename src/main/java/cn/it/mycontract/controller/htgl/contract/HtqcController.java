@@ -2,6 +2,7 @@ package cn.it.mycontract.controller.htgl.contract;
 
 
 import cn.it.mycontract.entity.*;
+import cn.it.mycontract.mapper.SysUserMapper;
 import cn.it.mycontract.service.*;
 import cn.it.mycontract.vo.htglContractVo;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -55,6 +56,9 @@ public class HtqcController {
     @Autowired
     HtglFileService htglFileService;
 
+
+    @Autowired
+    SysUserMapper sysUserMapper;
 
 
     @RequestMapping("/queryHtqcPageList")
@@ -331,6 +335,25 @@ public class HtqcController {
         for (String deptId : departmentIdSplit){
             SysArea sysArea = sysAreaService.selectList(new EntityWrapper<SysArea>()
                     .eq("id", deptId)).get(0);
+
+
+            List<SysUser> sysCSUsers = sysUserMapper.selectCSUser(sysArea.getName());
+
+            if (sysCSUsers != null){
+                for (SysUser sysCSUser : sysCSUsers){
+                    HtglProcessRecord processRecord = new HtglProcessRecord();
+                    processRecord.setContractId(Integer.parseInt(cid));
+                    processRecord.setNowHandler(sysCSUser.getId());
+                    processRecord.setStatus("0");
+                    processRecord.setDelSort(cur2.toString());
+                    processRecord.setAreaName(sysArea.getName());
+                    htglProcessRecordService.insert(processRecord);
+
+                    cur2 ++;
+                }
+            }
+
+
 
             HtglProcessRecord processRecord2 = new HtglProcessRecord();
             processRecord2.setContractId(Integer.parseInt(cid));

@@ -25,4 +25,8 @@ public interface SysUserMapper extends BaseMapper<SysUser> {
 
     SysUser selectUserAndArea(@Param("user_id") Integer id);
 
+
+    List<SysUser> selectCSUser(@Param("areaName") String areaName);
+
+
 }

@@ -21,7 +21,14 @@
     <div class="panel-heading">
         <h3 class="panel-title">合同起草</h3>
     </div>
+
+
     <div class="panel-body">
+
+        <a  style="margin-left: 400px;" class="btn btn btn-info " data-toggle="modal" data-target="#myModal">下载合同模板</a>
+
+
+
         <form name="htqcForm" th:action="@{/addContract}" method="post" enctype="multipart/form-data">
             <div class="form-group">
                 <label>合同名称:</label>
@@ -104,6 +111,26 @@
             <button type="submit" id="submitBtn" class="btn btn-default">提交</button>
         </form>
 
+    </div>
+
+
+
+</div>
+
+<!-- 模态框（Modal） -->
+<div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+            </div>
+            <div class="modal-body">
+                <iframe allowfullscreen mozallowfullscreen webkitallowfullscreen  marginheight="0" marginwidth="0" frameborder="0"
+                         width="100%" height="100%"
+                         th:src="@{/queryTemplatePageList}"></iframe>
+            </div>
+            <div class="modal-footer">
+            </div>
+        </div>
     </div>
 </div>
 

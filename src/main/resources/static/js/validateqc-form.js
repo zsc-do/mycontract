@@ -118,6 +118,7 @@ function checkDepartmentsId(){
 
 $('#submitBtn').click(function (event) {
 
+
     let form = $('#submitBtn');
     if(!checkcontractName()
         || !checkSponsorName()
@@ -130,6 +131,10 @@ $('#submitBtn').click(function (event) {
 
         event.preventDefault();
     }
+
+
+
+
 
     form.submit();
 });

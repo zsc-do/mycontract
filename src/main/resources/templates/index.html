@@ -72,6 +72,12 @@
         };
 
 
+        function topTo(){
+            document.getElementById('iframeoper').scrollIntoView();
+        }
+
+
+
         let basePath = [[${#httpServletRequest.getContextPath()}]];
 
         $.ajax({
@@ -86,7 +92,12 @@
                 elementById.innerText = '当前用户：' + result['name']
             }
         });
+
+
+
     </script>
+
+
 
 </body>
 </html>

@@ -96,11 +96,27 @@
 
 
 
-                <button type="submit" id="submitBtn" class="btn btn-default">提交</button>
+                <button type="submit" id="submitBtn" class="btn btn-default" data-toggle="modal" data-target="#myModal">提交</button>
             </form>
 
         </div>
     </fieldset>
+
+
+    <!-- 模态框（Modal） -->
+    <div class="modal fade" id="myModal" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                </div>
+                <div class="modal-body">
+                    <h4>处理中···</h4>
+                </div>
+                <div class="modal-footer">
+                </div>
+            </div>
+        </div>
+    </div>
 
 
 </div>
@@ -108,6 +124,17 @@
 
 
 <script th:inline="javascript">
+
+    $("#submitBtn").click(function () {
+
+        parent.topTo();
+
+        setTimeout(function () {
+            let form = $('#submitBtn');
+            form.submit();
+        },3000);
+
+    })
 
 
 

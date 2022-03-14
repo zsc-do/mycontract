@@ -84,4 +84,23 @@ SELECT
     WHERE
         su.id = #{user_id}
     </select>
+
+
+
+    <select id="selectCSUser" resultMap="sysUserResult">
+        SELECT
+	su.id AS user_id,
+	su.NAME AS user_name,
+	su.account AS user_account,
+	su.mobile AS user_mobile,
+	sr.id AS role_id,
+	sr.`name` AS role_name
+    FROM
+        sys_user su
+        LEFT JOIN sys_user_role sur ON su.id = sur.user_id
+        LEFT JOIN sys_role sr ON sur.role_id = sr.id
+				LEFT JOIN sys_user_area sua on su.id = sua.user_id
+				LEFT JOIN sys_area sa on sua.area_id = sa.id
+    WHERE su.del_flag = "0" and sr.`name` = '审签初审人员' and sa.`name` = #{areaName}
+    </select>
 </mapper>
