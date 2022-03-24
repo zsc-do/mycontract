@@ -36,4 +36,5 @@ public interface HtglContractService extends IService<HtglContract> {
 
     List<HtglContract> queryHtqdPageList(Integer cur, Integer operatorId,String contractName);
 
+    SysUser selectNowProcessHandler(String cid);
 }

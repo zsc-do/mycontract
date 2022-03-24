@@ -219,4 +219,27 @@ public class HtsqController {
         return count;
     }
 
+
+    @ResponseBody
+    @RequestMapping("/selectNowProcessHandler")
+    public SysUser selectNowProcessHandler(@RequestParam("cid") String cid){
+
+
+
+        SysUser sysUser = htglContractService.selectNowProcessHandler(cid);
+
+        if (sysUser == null){
+            sysUser = new SysUser();
+            sysUser.setName("当前合同审签已完毕");
+
+        }
+
+        return sysUser;
+    }
+
+
+
+
+
+
 }

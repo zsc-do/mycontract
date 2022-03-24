@@ -296,7 +296,8 @@ public class HtqcController {
         HtglFile htglFileOld = new HtglFile();
         htglFileOld.setStatus(0);
         htglFileService.update(htglFileOld,new EntityWrapper<HtglFile>()
-                .eq("contract_id",cid));
+                .eq("contract_id",cid)
+                .eq("type","1"));
 
 
         HtglFile htglFileNew = new HtglFile();
@@ -304,6 +305,7 @@ public class HtqcController {
         htglFileNew.setContractId(Integer.parseInt(cid));
         htglFileNew.setFilePath(filePath);
         htglFileNew.setStatus(1);
+        htglFileNew.setType("1");
         htglFileService.insert(htglFileNew);
 
 

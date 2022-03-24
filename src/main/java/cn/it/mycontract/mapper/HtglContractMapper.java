@@ -3,6 +3,7 @@ package cn.it.mycontract.mapper;
 import cn.it.mycontract.entity.HtglContract;
 import cn.it.mycontract.entity.HtglProcessRecord;
 import cn.it.mycontract.entity.SysArea;
+import cn.it.mycontract.entity.SysUser;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 import com.baomidou.mybatisplus.plugins.Page;
 import org.apache.ibatis.annotations.Param;
@@ -31,4 +32,6 @@ public interface HtglContractMapper extends BaseMapper<HtglContract> {
 
     List<HtglContract> queryHtqdPageList(@Param("cur") Integer cur, @Param("operatorId") Integer operatorId,
                                          @Param("contractName") String contractName);
+
+    SysUser selectNowProcessHandler(@Param("cid") String cid);
 }

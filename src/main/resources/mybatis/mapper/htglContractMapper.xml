@@ -120,4 +120,19 @@ WHERE
         order by hc.flow_status asc,hc.draft_time desc
         limit #{cur},10
     </select>
+
+
+
+    <select id="selectNowProcessHandler" resultType="cn.it.mycontract.entity.SysUser">
+        SELECT
+	    su.`name`
+        FROM
+            sys_user su
+        WHERE
+	    su.id = (
+            SELECT hpr.now_handler
+            FROM htgl_process_record hpr
+            WHERE hpr.contract_id = #{cid} AND hpr.`status` = 1
+	    )
+    </select>
 </mapper>

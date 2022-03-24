@@ -92,6 +92,14 @@
 
     <div class="tpt-login">
         <h2>用户登录</h2>
+        <div th:if="${count} != null">
+            <div th:if="${count} >= 1">
+                <div style="height: 20px;width: auto;color: red" th:text="'您还有' + ${count} + '次机会尝试'"></div>
+            </div>
+            <div th:if="${count} <= 0">
+                <div style="height: 20px;width: auto;color: red">请等待1个小时,账号已被锁定</div>
+            </div>
+        </div>
         <form id="loginForm" th:action="@{/login}" method="post">
             <input type="text" name="account" placeholder="请输入账号"> <br/>
             <input type="text" name="password" placeholder="请输入密码"> <br>

@@ -197,6 +197,7 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
         htglFile.setContractId(htglContract.getId());
         htglFile.setFilePath(filePath);
         htglFile.setStatus(1);
+        htglFile.setType("1");
 
         htglFileMapper.insert(htglFile);
     }
@@ -224,6 +225,13 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
         List<HtglContract> htglContractList = htglContractMapper.queryHtqdPageList(cur,operatorId,contractName);
 
         return htglContractList;
+    }
+
+    @Override
+    public SysUser selectNowProcessHandler(String cid) {
+
+        SysUser sysUser = htglContractMapper.selectNowProcessHandler(cid);
+        return sysUser;
     }
 
 

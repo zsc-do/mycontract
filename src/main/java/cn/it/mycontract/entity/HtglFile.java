@@ -44,6 +44,9 @@ public class HtglFile implements Serializable {
      */
     private Integer contractId;
 
+
+    private String type;
+
     public Integer getFileId() {
         return fileId;
     }
@@ -78,6 +81,15 @@ public class HtglFile implements Serializable {
 
     public void setContractId(Integer contractId) {
         this.contractId = contractId;
+    }
+
+
+    public String getType() {
+        return type;
+    }
+
+    public void setType(String type) {
+        this.type = type;
     }
 
     @Override

@@ -44,11 +44,15 @@
 
 
     <select id="selectBoss" resultType="cn.it.mycontract.entity.SysUser">
-        SELECT su.id,su.name
-        from sys_user su
-        LEFT JOIN sys_area sa
-        on su.area_id = sa.id
-        where sa.`name` = '局级'
+        SELECT
+	su.id,
+	su.NAME
+    FROM
+        sys_user su
+        LEFT JOIN sys_user_area sua ON su.id = sua.user_id
+        LEFT JOIN sys_area sa ON sua.area_id = sa.id
+    WHERE
+        sa.`name` = '局级'
 
     </select>
 
