@@ -135,4 +135,46 @@ WHERE
             WHERE hpr.contract_id = #{cid} AND hpr.`status` = 1
 	    )
     </select>
+
+
+    <!--获取执行不完全退回的那个审签人-->
+    <select id="selectNextHandlerNoBack" resultType="cn.it.mycontract.entity.SysUser">
+    SELECT
+        *
+    FROM
+        sys_user su
+    WHERE
+        su.id = (
+            SELECT
+                hpr.now_handler
+            FROM
+                htgl_process_record hpr
+            WHERE
+                hpr.contract_id = #{cid}
+                AND hpr.`status` = 0
+                AND hpr.del_sort = (
+                    SELECT min( hpr.del_sort )
+                    FROM htgl_process_record hpr
+                    WHERE hpr.contract_id = #{cid} AND hpr.`status` = 0
+                )
+        )
+    </select>
+
+
+    <!--获取执行不完全退回的那个流程-->
+    <select id="selectNextProcessNoBack" resultType="cn.it.mycontract.entity.HtglProcessRecord">
+        SELECT
+                hpr.*
+            FROM
+                htgl_process_record hpr
+            WHERE
+                hpr.contract_id = #{cid}
+                AND hpr.`status` = 0
+                AND hpr.del_sort = (
+                    SELECT min( hpr.del_sort )
+                    FROM htgl_process_record hpr
+                    WHERE hpr.contract_id = #{cid} AND hpr.`status` = 0
+                )
+
+    </select>
 </mapper>

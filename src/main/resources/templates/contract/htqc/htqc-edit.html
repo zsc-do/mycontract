@@ -21,6 +21,7 @@
             <form th:action="@{/updateContract}" method="post" enctype="multipart/form-data">
                 <input type="text" th:value="${contract.id}" name="cid" style="display: none">
                 <input type="text" th:value="${contract.sponsorId}" name="sponsorId" style="display: none">
+                <input type="text" th:value="${contract.flowStatus}" name="flowStatus" style="display: none">
 
 
                 <fieldset disabled>
@@ -30,6 +31,7 @@
                     </div>
                     <div class="form-group">
                         <label>需求单位:</label>
+                        <input style="display: none" id="sponsor-id" th:value="${contract.sponsorId}" type="text" />
                         <input th:value="${contract.sponsorName}" type="text" name="sponsorName" class="form-control"/>
                     </div>
                     <div class="form-group">
@@ -93,6 +95,7 @@
 
 
 
+                <div th:if="${nextHandler} == null">
                     <div class="form-group">
                         <label>请选择下一步流程(部门领导审核):</label>
                         <select  class=" form-control leader-select" name="leaderId">
@@ -108,12 +111,29 @@
                         <select  class="form-control boss-select"  name="bossId">
                         </select>
                     </div>
+                </div>
+
+
+                <div th:if="${nextHandler} != null">
+
+
+                    <div class="alert alert-success processhandler" role="alert" >
+                        <label class="glyphicon glyphicon-pencil" aria-hidden="true">  下一步审签人:</label>
+                        <span>
+                            <div th:text="${nextHandler.name}"></div>
+                        </span>
+
+                    </div>
+
+                </div>
+
 
                 <button type="submit" id="submitBtn" class="btn btn-default">提交</button>
             </form>
 
         </div>
     </fieldset>
+
 
 
 </div>
@@ -168,28 +188,30 @@
         }
     });
 
+    var options = $("#sponsor-id");　　　　//获取选中项
+
+    var sponsorId = options.val();
+
     $.ajax({
         type:"GET",
-        url:basePath + "/getAllLeader",
-        data:"",//请求参数
+        url:basePath + "/getMatchLeader",
+        data:"sponsorId="+sponsorId,//请求参数
         dataType:"JSON",
         success:function(result){
 
+            $(".leader-select").empty();
 
 
-            for (let i = 0; i < result.length; i++){
-                let optionNode = document.createElement('option');
-                optionNode.setAttribute("value",result[i].leaderId);
-                optionNode.innerText = result[i].leaderName;
-
-                leaderSelect.appendChild(optionNode);
+            let optionNode = document.createElement('option');
+            optionNode.setAttribute("value",result['leaderId']);
+            optionNode.innerText = result['name'];
 
 
-            }
-
+            leaderSelect.appendChild(optionNode);
 
         }
     });
+
 
 
 

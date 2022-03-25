@@ -1,6 +1,7 @@
 package cn.it.mycontract.mapper;
 
 import cn.it.mycontract.entity.HtglProcessRecord;
+import cn.it.mycontract.entity.SysUser;
 import com.baomidou.mybatisplus.mapper.BaseMapper;
 
 /**

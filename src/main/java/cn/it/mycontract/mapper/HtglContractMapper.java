@@ -34,4 +34,8 @@ public interface HtglContractMapper extends BaseMapper<HtglContract> {
                                          @Param("contractName") String contractName);
 
     SysUser selectNowProcessHandler(@Param("cid") String cid);
+
+    SysUser selectNextHandlerNoBack(@Param("cid") String cid);
+
+    HtglProcessRecord selectNextProcessNoBack(@Param("cid") String cid);
 }

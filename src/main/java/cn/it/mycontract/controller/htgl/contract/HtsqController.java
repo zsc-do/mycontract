@@ -76,7 +76,7 @@ public class HtsqController {
 
         //退回合同
         if (!"2".equals(methodId)){
-            returnContract(id,opinionContent,request);
+            returnContract(methodId,id,opinionContent,request);
             return "redirect:/queryHtsqPageList";
         }
 
@@ -140,7 +140,7 @@ public class HtsqController {
 
 
 
-    public void returnContract(String contractId,String opinionContent,HttpServletRequest request){
+    public void returnContract(String methodId,String contractId,String opinionContent,HttpServletRequest request){
 
 
         HttpSession session = request.getSession();
@@ -170,18 +170,31 @@ public class HtsqController {
         htglOpinion.setOpinionContent(opinionContent);
 
 
-        htglProcessRecordService.delete(new EntityWrapper<HtglProcessRecord>()
-                .eq("contract_id",contractId));
+        //处理完全退回
+        if ("1".equals(methodId)){
+            htglProcessRecordService.delete(new EntityWrapper<HtglProcessRecord>()
+                    .eq("contract_id",contractId));
 
-        HtglContract htglContract = new HtglContract();
-        htglContract.setFlowStatus("0");
+            HtglContract htglContract = new HtglContract();
+            htglContract.setFlowStatus("0");
 
-        htglContractService.update(htglContract,new EntityWrapper<HtglContract>()
-                .eq("id",contractId));
+            htglContractService.update(htglContract,new EntityWrapper<HtglContract>()
+                    .eq("id",contractId));
+        }
 
+        //处理非完全退回
+        if ("0".equals(methodId)){
+            tempProcessRecord.setStatus("0");
+            htglProcessRecordService.update(tempProcessRecord,new EntityWrapper<HtglProcessRecord>()
+                    .eq("id",tempProcessRecord.getId()));
 
+            HtglContract htglContract = new HtglContract();
+            htglContract.setFlowStatus("-1");
 
+            htglContractService.update(htglContract,new EntityWrapper<HtglContract>()
+                    .eq("id",contractId));
 
+        }
 
         htglOpinionService.insert(htglOpinion);
 

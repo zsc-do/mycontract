@@ -253,6 +253,16 @@ public class HtqcController {
         List<HtglContractPartener> contractParteners = htglContractPartenerService.selectList(new EntityWrapper<HtglContractPartener>()
                 .eq("contract_id", cid));
 
+        String flowStatus = htglContract.getFlowStatus();
+
+        if ("-1".equals(flowStatus)){
+
+           SysUser sysUser =  htglProcessRecordService.selectNextHandlerNoBack(cid);
+
+           model.addAttribute("nextHandler",sysUser);
+
+        }
+
         model.addAttribute("contract",htglContract);
         model.addAttribute("contractParteners",contractParteners);
 
@@ -264,13 +274,15 @@ public class HtqcController {
 
     @RequestMapping("updateContract")
     public String updateContract(@RequestParam("cid") String cid,
-                                 @RequestParam("leaderId") String leaderId,
-                                 @RequestParam("departmentsId") String departmentsId,
-                                 @RequestParam("bossId") String bossId,
+                                 @RequestParam(value = "leaderId",required = false) String leaderId,
+                                 @RequestParam(value = "departmentsId",required = false) String departmentsId,
+                                 @RequestParam(value = "bossId",required = false) String bossId,
                                  @RequestParam("sponsorId") String sponsorId,
                                  @RequestParam("opinionContent") String opinionContent,
                                  @RequestParam("htzwFile") MultipartFile file,
+                                 @RequestParam("flowStatus") String flowStatus,
                                  HttpServletRequest request){
+
 
 
 
@@ -311,73 +323,92 @@ public class HtqcController {
 
 
 
-        HtglContract htglContract = new HtglContract();
-        htglContract.setFlowStatus("1");
+        //处理完全退回合同
+        if ("0".equals(flowStatus)){
 
-        htglContractService.update(htglContract,new EntityWrapper<HtglContract>()
-                .eq("id",cid));
+            HtglContract htglContract = new HtglContract();
+            htglContract.setFlowStatus("1");
 
-
-        SysArea userArea = sysAreaService.selectOne(new EntityWrapper<SysArea>()
-                .eq("id", sponsorId));
-
-        HtglProcessRecord processRecord1 = new HtglProcessRecord();
-        processRecord1.setContractId(Integer.parseInt(cid));
-        processRecord1.setNowHandler(Integer.parseInt(leaderId));
-        processRecord1.setStatus("1");
-        processRecord1.setDelSort("1");
-        processRecord1.setAreaName(userArea.getName());
-        htglProcessRecordService.insert(processRecord1);
+            htglContractService.update(htglContract,new EntityWrapper<HtglContract>()
+                    .eq("id",cid));
 
 
-        String[] departmentIdSplit = departmentsId.split(",");
+            SysArea userArea = sysAreaService.selectOne(new EntityWrapper<SysArea>()
+                    .eq("id", sponsorId));
+
+            HtglProcessRecord processRecord1 = new HtglProcessRecord();
+            processRecord1.setContractId(Integer.parseInt(cid));
+            processRecord1.setNowHandler(Integer.parseInt(leaderId));
+            processRecord1.setStatus("1");
+            processRecord1.setDelSort("1");
+            processRecord1.setAreaName(userArea.getName());
+            htglProcessRecordService.insert(processRecord1);
 
 
-        Integer cur2 = 2;
-        for (String deptId : departmentIdSplit){
-            SysArea sysArea = sysAreaService.selectList(new EntityWrapper<SysArea>()
-                    .eq("id", deptId)).get(0);
+            String[] departmentIdSplit = departmentsId.split(",");
 
 
-            List<SysUser> sysCSUsers = sysUserMapper.selectCSUser(sysArea.getName());
+            Integer cur2 = 2;
+            for (String deptId : departmentIdSplit){
+                SysArea sysArea = sysAreaService.selectList(new EntityWrapper<SysArea>()
+                        .eq("id", deptId)).get(0);
 
-            if (sysCSUsers != null){
-                for (SysUser sysCSUser : sysCSUsers){
-                    HtglProcessRecord processRecord = new HtglProcessRecord();
-                    processRecord.setContractId(Integer.parseInt(cid));
-                    processRecord.setNowHandler(sysCSUser.getId());
-                    processRecord.setStatus("0");
-                    processRecord.setDelSort(cur2.toString());
-                    processRecord.setAreaName(sysArea.getName());
-                    htglProcessRecordService.insert(processRecord);
 
-                    cur2 ++;
+                List<SysUser> sysCSUsers = sysUserMapper.selectCSUser(sysArea.getName());
+
+                if (sysCSUsers != null){
+                    for (SysUser sysCSUser : sysCSUsers){
+                        HtglProcessRecord processRecord = new HtglProcessRecord();
+                        processRecord.setContractId(Integer.parseInt(cid));
+                        processRecord.setNowHandler(sysCSUser.getId());
+                        processRecord.setStatus("0");
+                        processRecord.setDelSort(cur2.toString());
+                        processRecord.setAreaName(sysArea.getName());
+                        htglProcessRecordService.insert(processRecord);
+
+                        cur2 ++;
+                    }
                 }
+
+
+
+                HtglProcessRecord processRecord2 = new HtglProcessRecord();
+                processRecord2.setContractId(Integer.parseInt(cid));
+                processRecord2.setNowHandler(sysArea.getLeaderId());
+                processRecord2.setStatus("0");
+                processRecord2.setDelSort(cur2.toString());
+                processRecord2.setAreaName(sysArea.getName());
+                htglProcessRecordService.insert(processRecord2);
+
+                cur2 ++;
             }
 
 
 
-            HtglProcessRecord processRecord2 = new HtglProcessRecord();
-            processRecord2.setContractId(Integer.parseInt(cid));
-            processRecord2.setNowHandler(sysArea.getLeaderId());
-            processRecord2.setStatus("0");
-            processRecord2.setDelSort(cur2.toString());
-            processRecord2.setAreaName(sysArea.getName());
-            htglProcessRecordService.insert(processRecord2);
 
-            cur2 ++;
+            HtglProcessRecord processRecord3 = new HtglProcessRecord();
+            processRecord3.setContractId(Integer.parseInt(cid));
+            processRecord3.setNowHandler(Integer.parseInt(bossId));
+            processRecord3.setStatus("0");
+            processRecord3.setDelSort(cur2.toString());
+            processRecord3.setAreaName("局级");
+            htglProcessRecordService.insert(processRecord3);
         }
 
 
+        //处理非完全退回合同
+        if ("-1".equals(flowStatus)){
+            HtglProcessRecord htglProcessRecord = htglProcessRecordService.selectNextProcessNoBack(cid);
+            htglProcessRecord.setStatus("1");
+            htglProcessRecordService.update(htglProcessRecord,new EntityWrapper<HtglProcessRecord>()
+                    .eq("id",htglProcessRecord.getId()));
 
+            HtglContract htglContract = new HtglContract();
+            htglContract.setFlowStatus("1");
 
-        HtglProcessRecord processRecord3 = new HtglProcessRecord();
-        processRecord3.setContractId(Integer.parseInt(cid));
-        processRecord3.setNowHandler(Integer.parseInt(bossId));
-        processRecord3.setStatus("0");
-        processRecord3.setDelSort(cur2.toString());
-        processRecord3.setAreaName("局级");
-        htglProcessRecordService.insert(processRecord3);
+            htglContractService.update(htglContract,new EntityWrapper<HtglContract>()
+                    .eq("id",cid));
+        }
 
 
         HtglContract ContractForOpinion = htglContractService.selectOne(new EntityWrapper<HtglContract>()

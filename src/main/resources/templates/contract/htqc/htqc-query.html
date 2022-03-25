@@ -60,10 +60,10 @@
             <td th:text="${contract.operatorName}"></td>
             <td th:text="${#dates.format(contract.draftTime, 'yyyy-MM-dd')}"></td>
             <td>
-                <div th:if="${contract.flowStatus}==0" class="btn-group">
+                <div th:if="${contract.flowStatus}<=0" class="btn-group">
                     <a th:href="@{/toHtqcEdit(cid=${contract.id})}" class="btn btn-danger">进行修改(被退回合同)</a>
                 </div>
-                <div th:if="${contract.flowStatus}!=0" class="btn-group">
+                <div th:if="${contract.flowStatus}>0" class="btn-group">
                     <a th:href="@{/toHtqcDetail(cid=${contract.id})}" class="btn btn-primary">查询</a>
                 </div>
             </td>
