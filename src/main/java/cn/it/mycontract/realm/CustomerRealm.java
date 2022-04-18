@@ -23,12 +23,14 @@ public class CustomerRealm extends AuthorizingRealm {
     }
 
     @Override
-    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token) throws AuthenticationException {
+    protected AuthenticationInfo doGetAuthenticationInfo(AuthenticationToken token)
+            throws AuthenticationException {
 
         //根据身份信息
         String principal = (String) token.getPrincipal();
         //在工厂中获取service对象
-        SysUserMapper sysUserMapper = (SysUserMapper) ApplicationContextUtils.getBean("sysUserMapper");
+        SysUserMapper sysUserMapper = (SysUserMapper) ApplicationContextUtils
+                .getBean("sysUserMapper");
         //根据身份信息查询
         SysUser sysUser1 = new SysUser();
         sysUser1.setAccount(principal);

@@ -32,15 +32,20 @@ public class ShiroConfig {
         map.put("/logout", "anon");
         map.put("/registerPage", "anon");
         map.put("/register", "anon");
+        map.put("/mobile/**", "anon");
+
+
 
         map.put("/js/**", "anon");
+        map.put("/fonts/**", "anon");
         map.put("/css/**", "anon");
         //代表拦截项目中一切资源
          map.put("/**", "authc");
 
          //默认认证界面路径，
          shiroFilterFactoryBean.setLoginUrl("/loginPage");
-         shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
+
+        shiroFilterFactoryBean.setFilterChainDefinitionMap(map);
 
 
          return shiroFilterFactoryBean;

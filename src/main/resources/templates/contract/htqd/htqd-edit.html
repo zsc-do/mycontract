@@ -29,6 +29,7 @@
                     </div>
                     <div class="form-group">
                         <label>需求单位:</label>
+                        <input style="display: none" id="sponsor-id" th:value="${contract.sponsorId}" type="text" />
                         <input th:value="${contract.sponsorName}" type="text" name="sponsorName" class="form-control"/>
                     </div>
                     <div class="form-group">
@@ -190,25 +191,27 @@
     });
 
 
+    var options = $("#sponsor-id");　　　　//获取选中项
 
+    var sponsorId = options.val();
 
     $.ajax({
         type:"GET",
-        url:basePath + "/getAllLeader",
-        data:"",//请求参数
+        url:basePath + "/getMatchLeader",
+        data:"sponsorId="+sponsorId,//请求参数
         dataType:"JSON",
         success:function(result){
 
+            $(".leader-select").empty();
 
 
-            for (let i = 0; i < result.length; i++){
-                let optionNode = document.createElement('option');
-                optionNode.setAttribute("value",result[i].leaderId);
-                optionNode.innerText = result[i].leaderName;
+            let optionNode = document.createElement('option');
+            optionNode.setAttribute("value",result['leaderId']);
+            optionNode.innerText = result['name'];
 
 
-                leaderSelect.appendChild(optionNode);
-            }
+            leaderSelect.appendChild(optionNode);
+
         }
     });
 

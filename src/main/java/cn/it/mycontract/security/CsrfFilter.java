@@ -37,16 +37,13 @@ public class CsrfFilter implements Filter {
 //            return;
 //        }
 
-
-        String serverName = request.getServerName();//获取请求服务地址
+        //获取请求服务地址
+        String serverName = request.getServerName();
         String referer =request.getHeader("Referer");
 
         if (!StringUtils.isEmpty(referer)) {
-            if (referer.indexOf(serverName) == -1) {//同一平台进入与单点登录进入不进行拦截
-
-
-                System.err.println("refer========================>" + referer);
-                System.err.println("servername================================>" + serverName);
+            //同一平台进入与单点登录进入不进行拦截
+            if (referer.indexOf(serverName) == -1) {
 
                 response.setContentType("text/html;charset=utf-8");
                 response.setStatus(403);

@@ -466,7 +466,9 @@ public class HtqcController {
 
         Integer count = htglContractService.selectCount(new EntityWrapper<HtglContract>()
                 .eq("operator_id", sysUser.getId())
-                .eq("flow_status", "0"));
+                .eq("flow_status", "0")
+                .or()
+                .eq("flow_status", "-1"));
 
         return count;
 

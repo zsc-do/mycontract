@@ -21,8 +21,6 @@
     WHERE
         u.account = #{account}
         and m.del_flag = '0'
-
-
     </select>
 
 
