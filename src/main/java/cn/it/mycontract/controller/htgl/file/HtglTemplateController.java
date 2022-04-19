@@ -18,6 +18,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestParam;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 
 import javax.servlet.http.HttpServletRequest;
@@ -128,6 +129,21 @@ public class HtglTemplateController {
 
         return "redirect:/queryTemplatePageList";
 
+
+    }
+
+
+    @RequestMapping("/queryTemplatePageListJson")
+    @ResponseBody
+    public List<HtglTemplate> queryHtqcPageListJson(HttpServletRequest request){
+
+
+        List<HtglTemplate> templates = htglTemplateService.selectList(new EntityWrapper<HtglTemplate>()
+                .eq("del_flag", "1"));
+
+
+
+        return templates;
 
     }
 

@@ -13,7 +13,7 @@
 
     .tpt-login {
         width: 360px;
-        height: 360px;
+        height: 400px;
         padding: 50px 30px;
         background: #FFF;
         border-radius: 8px;
@@ -103,12 +103,17 @@
         <form id="loginForm" th:action="@{/login}" method="post">
             <input type="text" name="account" placeholder="请输入账号"> <br/>
             <input type="text" name="password" placeholder="请输入密码"> <br>
+
+            <input type="text" name="yzm" style="width: 150px;" placeholder="请输入验证码">
+            <div id="imgcontainer" style="float: right"></div>
+
+
             <button id="submitBtn">立即登录</button>
         </form>
     </div>
 
 
-<script>
+<script th:inline="javascript">
 
     function checkAccount(){
         let x=document.forms["loginForm"]["account"].value;
@@ -134,6 +139,18 @@
     }
 
 
+    function checkyzm(){
+        let x=document.forms["loginForm"]["yzm"].value;
+        if (x==null || x=="")
+        {
+            alert("验证码为空");
+            return false;
+        }else {
+            return true;
+        }
+    }
+
+
 
 
 
@@ -142,13 +159,64 @@
 
         let form = $('#submitBtn');
         if(!checkAccount() ||
-           !checkPassword()){
+           !checkPassword() ||
+           !checkyzm()){
 
             event.preventDefault();
         }
 
         form.submit();
     });
+
+
+    let basePath = [[${#httpServletRequest.getContextPath()}]];
+
+
+
+
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("get", basePath + '/YZM/captcha', true);
+    xhr.responseType = "blob";
+    xhr.onload = function() {
+        if (this.status == 200) {
+            var blob = this.response;
+            var img = document.createElement("img");
+            img.onload = function(e) {
+                window.URL.revokeObjectURL(img.src);
+            };
+            img.src = window.URL.createObjectURL(blob);
+
+            $("#imgcontainer").html(img);
+
+        } };
+    xhr.send();
+
+
+
+
+    var imgcontainer = document.getElementById('imgcontainer');
+
+    imgcontainer.onclick = function () {
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("get", basePath + '/YZM/captcha', true);
+        xhr.responseType = "blob";
+        xhr.onload = function() {
+            if (this.status == 200) {
+                var blob = this.response;
+                var img = document.createElement("img");
+                img.onload = function(e) {
+                    window.URL.revokeObjectURL(img.src);
+                };
+                img.src = window.URL.createObjectURL(blob);
+
+                $("#imgcontainer").html(img);
+
+            } };
+        xhr.send();
+    }
+
 </script>
 </body>
 </html>

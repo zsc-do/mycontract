@@ -70,6 +70,10 @@
                     <label>甲方:</label>
                     <input type="text" name="partenerName" class="partnerType form-control"/>
                 </div>
+                <div class="form-group">
+                    <label>乙方:</label>
+                    <input type="text" name="partenerName" class="partnerType form-control"/>
+                </div>
             </div>
 
 
@@ -122,11 +126,18 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
+                <h4>合同模板下载</h4>
             </div>
             <div class="modal-body">
-                <iframe allowfullscreen mozallowfullscreen webkitallowfullscreen  marginheight="0" marginwidth="0" frameborder="0"
-                         width="100%" height="100%"
-                         th:src="@{/queryTemplatePageList}"></iframe>
+
+
+
+                <ul class="list-group" id="templateUl">
+                    <!--<li class="list-group-item"><a>Cras justo odio</a></li>-->
+
+                </ul>
+
+
             </div>
             <div class="modal-footer">
             </div>
@@ -241,6 +252,43 @@
 
         }
     });
+
+
+
+    $.ajax({
+        type:"GET",
+        url:basePath + "/queryTemplatePageListJson",
+        data:"",//请求参数
+        dataType:"JSON",
+        success:function(result){
+
+            console.log(result);
+
+            let templateUl = document.getElementById('templateUl');
+
+            for (let i = 0; i<result.length;i++){
+
+                let li = document.createElement('li');
+                li.setAttribute('class','list-group-item');
+
+
+                templateUl.appendChild(li);
+
+
+
+                let a = document.createElement('a');
+                a.setAttribute('href',basePath + '/downloadHTMB?tid=' + result[i]['templateId']);
+
+                a.innerText = result[i]['templateName'];
+
+                li.appendChild(a);
+
+
+            }
+
+        }
+    });
+
 
 
 

@@ -40,6 +40,9 @@ public class LoginController {
     @Autowired
     SysMenuService sysMenuService;
 
+    @Autowired
+    YZMController yzmController;
+
 
 
 
@@ -64,8 +67,19 @@ public class LoginController {
     @RequestMapping("/login")
     public String login(@RequestParam("account") String account,
                         @RequestParam("password") String password,
+                        @RequestParam("yzm") String yzmCode,
                         Model model,
                         HttpServletRequest request){
+        if (!yzmController.verify(yzmCode,request)){
+
+            yzmController.removeCaptcha(request);
+
+            return "redirect:/loginPage?data=" + "验证码错误";
+
+        }
+
+        yzmController.removeCaptcha(request);
+
 
         if (loginLockCache.get(account) != null){
 

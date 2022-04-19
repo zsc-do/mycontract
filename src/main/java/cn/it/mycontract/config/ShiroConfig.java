@@ -32,6 +32,7 @@ public class ShiroConfig {
         map.put("/logout", "anon");
         map.put("/registerPage", "anon");
         map.put("/register", "anon");
+        map.put("/YZM/**", "anon");
         map.put("/mobile/**", "anon");
 
 
