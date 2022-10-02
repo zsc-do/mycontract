@@ -2,6 +2,7 @@ package cn.it.mycontract.controller.htgl.contract;
 
 
 import cn.it.mycontract.entity.*;
+import cn.it.mycontract.mapper.HtglContractMapper;
 import cn.it.mycontract.mapper.SysUserMapper;
 import cn.it.mycontract.service.*;
 import cn.it.mycontract.vo.htglContractVo;
@@ -60,6 +61,9 @@ public class HtqcController {
     @Autowired
     SysUserMapper sysUserMapper;
 
+    @Autowired
+    HtglContractMapper contractMapper;
+
 
     @RequestMapping("/queryHtqcPageList")
     public String queryHtqcPageList(HttpServletRequest request,Model model,
@@ -96,6 +100,13 @@ public class HtqcController {
         SysUser user = sysUserService.selectUserAndArea(sysUser.getId());
 
         model.addAttribute("user",user);
+
+
+        String replace = UUID.randomUUID().toString().replace("-", "");
+
+        request.getSession().setAttribute("token",replace);
+
+        model.addAttribute("token",replace);
 
 
         return "contract/htqc/htqc-add";
@@ -146,14 +157,24 @@ public class HtqcController {
 
 
 
-    /*
-    * 保存起草的合同
-    */
+
     @RequestMapping("/addContract")
     public String addContract(@Valid htglContractVo htglContractVo, BindingResult bindingResult,
                               @RequestParam("opinionContent") String opinionContent,
+                              @RequestParam(value = "token",required = false) String token,
                               HttpServletRequest request,
-                              @RequestParam("htzwFile") MultipartFile file){
+                              @RequestParam("htzwFile") MultipartFile file,Model model){
+
+
+        String token1 = (String) request.getSession().getAttribute("token");
+
+        if (token != null){
+            if (!token.equals(token1)){
+                return "";
+            }
+        }
+
+
 
 
 
@@ -448,9 +469,9 @@ public class HtqcController {
         HttpSession session = request.getSession();
         SysUser sysUser = (SysUser) session.getAttribute("sysUser");
 
-        Integer count = htglContractService.selectCount(new EntityWrapper<HtglContract>()
+        Integer count = htglContractService.selectList(new EntityWrapper<HtglContract>()
                 .eq("operator_id", sysUser.getId())
-                .eq("flow_status", "2"));
+                .eq("flow_status", "2")).size();
 
         return count;
 
@@ -464,11 +485,7 @@ public class HtqcController {
         HttpSession session = request.getSession();
         SysUser sysUser = (SysUser) session.getAttribute("sysUser");
 
-        Integer count = htglContractService.selectCount(new EntityWrapper<HtglContract>()
-                .eq("operator_id", sysUser.getId())
-                .eq("flow_status", "0")
-                .or()
-                .eq("flow_status", "-1"));
+        Integer count = contractMapper.selectCount(sysUser.getId());
 
         return count;
 

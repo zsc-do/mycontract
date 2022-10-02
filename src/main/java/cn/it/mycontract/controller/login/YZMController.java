@@ -20,22 +20,21 @@ public class YZMController {
     public void happyCaptcha(HttpServletRequest request, HttpServletResponse response){
 
         removeCaptcha(request);
-
-        System.out.println("======生成一次验证码======");
-        HappyCaptcha.require(request,response).type(CaptchaType.ARITHMETIC_ZH).build().finish();
+        HappyCaptcha.require(request,response).type(CaptchaType.NUMBER).build().finish();
     }
 
-
+    /*
+    * 验证码校验接口
+    * */
     @PostMapping("/YZM/verify")
     public Boolean verify(String code,HttpServletRequest request){
-        //Verification Captcha
         boolean flag = HappyCaptcha.verification(request,code,true);
-
         return flag;
-
     }
 
-
+    /*
+    * 验证码移除接口
+    * */
     @GetMapping("/YZM/remove/captcha")
     public void removeCaptcha(HttpServletRequest request){
         HappyCaptcha.remove(request);

@@ -15,8 +15,8 @@
         <result column="operator_id" property="operatorId"/>
         <result column="draft_time" property="draftTime"/>
         <result column="budget_code" property="budgetCode"/>
-        <result column="contrac_money" property="contractMoney"/>
-        <result column="contractcnt" property="contractCnt"/>
+        <result column="contract_money" property="contractMoney"/>
+        <result column="contract_cnt" property="contractCnt"/>
         <result column="approve_time" property="approveTime"/>
         <result column="flow_status" property="flowStatus"/>
 
@@ -176,5 +176,8 @@ WHERE
                     WHERE hpr.contract_id = #{cid} AND hpr.`status` = 0
                 )
 
+    </select>
+    <select id="selectCount" resultType="java.lang.Integer">
+        SELECT count(*) FROM htgl_contract WHERE (operator_id = #{id} AND (flow_status = 0 OR flow_status = -1))
     </select>
 </mapper>

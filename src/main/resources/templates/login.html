@@ -91,7 +91,7 @@
 
 
     <div class="tpt-login">
-        <h2>合同系统用户登录</h2>
+        <h2>ZSC合同系统用户登录</h2>
         <div th:if="${count} != null">
             <div th:if="${count} >= 1">
                 <div style="height: 20px;width: auto;color: red" th:text="'您还有' + ${count} + '次机会尝试'"></div>
@@ -169,13 +169,13 @@
     });
 
 
-    let basePath = [[${#httpServletRequest.getContextPath()}]];
+    var basePath = [[${#httpServletRequest.getContextPath()}]];
 
 
 
 
 
-    let xhr = new XMLHttpRequest();
+    var xhr = new XMLHttpRequest();
     xhr.open("get", basePath + '/YZM/captcha', true);
     xhr.responseType = "blob";
     xhr.onload = function() {
@@ -187,7 +187,10 @@
             };
             img.src = window.URL.createObjectURL(blob);
 
+
             $("#imgcontainer").html(img);
+
+
 
         } };
     xhr.send();
@@ -199,22 +202,28 @@
 
     imgcontainer.onclick = function () {
 
-        let xhr = new XMLHttpRequest();
-        xhr.open("get", basePath + '/YZM/captcha', true);
-        xhr.responseType = "blob";
-        xhr.onload = function() {
+
+
+        var xhr2 = new XMLHttpRequest();
+        xhr2.open("get", basePath + + '/YZM/captcha', true);
+        xhr2.responseType = "blob";
+        xhr2.onload = function() {
             if (this.status == 200) {
                 var blob = this.response;
                 var img = document.createElement("img");
                 img.onload = function(e) {
                     window.URL.revokeObjectURL(img.src);
                 };
+
                 img.src = window.URL.createObjectURL(blob);
+
+                console.log(window.URL.createObjectURL(blob))
+
 
                 $("#imgcontainer").html(img);
 
             } };
-        xhr.send();
+        xhr2.send();
     }
 
 </script>

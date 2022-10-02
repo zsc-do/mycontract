@@ -11,8 +11,8 @@ import java.io.IOException;
 import java.io.PrintWriter;
 
 @Component
-public class CsrfFilter implements Filter {
-    @Override
+public class CsrfFilter{
+
     public void doFilter(ServletRequest req, ServletResponse resp, FilterChain chain) throws IOException, ServletException {
         HttpServletRequest request = (HttpServletRequest) req;
         HttpServletResponse response = (HttpServletResponse) resp;
@@ -40,6 +40,11 @@ public class CsrfFilter implements Filter {
         //获取请求服务地址
         String serverName = request.getServerName();
         String referer =request.getHeader("Referer");
+
+
+        if ("127.0.0.1".equals(serverName)){
+            chain.doFilter(request, response);
+        }
 
         if (!StringUtils.isEmpty(referer)) {
             //同一平台进入与单点登录进入不进行拦截

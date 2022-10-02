@@ -12,15 +12,15 @@ public class FilterConfig {
     @Autowired
     private CsrfFilter csrfFilter;
 
-    @Bean
-    public FilterRegistrationBean registerAuthFilter() {
-        FilterRegistrationBean registration = new FilterRegistrationBean();
-        registration.setFilter(csrfFilter);
-        registration.addUrlPatterns("/*");
-        registration.setName("csrfFilter");
-        registration.setOrder(1);  //值越小，Filter越靠前。
-        return registration;
-    }
+//    @Bean
+//    public FilterRegistrationBean registerAuthFilter() {
+//        FilterRegistrationBean registration = new FilterRegistrationBean();
+//        registration.setFilter(csrfFilter);
+//        registration.addUrlPatterns("/*");
+//        registration.setName("csrfFilter");
+//        registration.setOrder(1);  //值越小，Filter越靠前。
+//        return registration;
+//    }
 
     //如果有多个Filter，再写一个public FilterRegistrationBean registerOtherFilter(){...}即可。
 }

@@ -168,14 +168,14 @@ public class LoginController {
 
     private Integer checkLoginCount(String username){
 
-
         //如果登录错误超过5次，即提示不能再登录
         Integer timsold =(Integer) loginCountCache.get(username);
 
         if(null!=timsold && timsold>=4){
             loginCountCache.put(username, loginCountCache.get(username)+1);
 
-            SimpleDateFormat simpleDateFormat = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            SimpleDateFormat simpleDateFormat =
+                    new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
             String format = simpleDateFormat.format(new Date());
 
             loginLockCache.put(username,format);
@@ -188,15 +188,16 @@ public class LoginController {
             return loginCountCache.get(username);
 
         }
-
         if(timsold>=1 && timsold<=3){
             loginCountCache.put(username, loginCountCache.get(username)+1);
             return loginCountCache.get(username);
         }
 
         return loginCountCache.get(username);
-
     }
+
+
+
 
     public static void main(String[] args) {
         DateFormat df = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");

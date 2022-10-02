@@ -1,6 +1,7 @@
 package cn.it.mycontract.mobile;
 
 
+import cn.it.mycontract.controller.login.YZMController;
 import cn.it.mycontract.entity.SysMenu;
 import cn.it.mycontract.entity.SysUser;
 import cn.it.mycontract.service.SysMenuService;
@@ -36,6 +37,12 @@ public class MobileLoginController {
     @Autowired
     SysMenuService sysMenuService;
 
+
+
+    @Autowired
+    YZMController yzmController;
+
+
     @RequestMapping("/mobile/loginPage")
     public String monileLoginPage(Model model){
 
@@ -50,8 +57,20 @@ public class MobileLoginController {
     @RequestMapping("/mobile/login")
     public String login(@RequestParam("account") String account,
                         @RequestParam("password") String password,
+                        @RequestParam("yzm") String yzmCode,
                         Model model,
                         HttpServletRequest request){
+
+
+        if (!yzmController.verify(yzmCode,request)){
+
+            yzmController.removeCaptcha(request);
+
+            return "redirect:/mobile/loginPage?data=" + "验证码错误";
+
+        }
+
+        yzmController.removeCaptcha(request);
 
 
         //获取主体对象
@@ -69,7 +88,7 @@ public class MobileLoginController {
             model.addAttribute("menus",menus);
 
 
-            return  "/mobile/mhtsq.html";
+            return  "mobile/mhtsq.html";
         } catch (UnknownAccountException e) {
             e.printStackTrace();
             System.out.println("用户名错误!");
