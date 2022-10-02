@@ -2,8 +2,10 @@ package cn.it.mycontract.controller.login;
 
 
 import cn.hutool.db.Entity;
+import cn.it.mycontract.entity.LogLogin;
 import cn.it.mycontract.entity.SysMenu;
 import cn.it.mycontract.entity.SysUser;
+import cn.it.mycontract.mapper.LogLoginMapper;
 import cn.it.mycontract.service.SysMenuService;
 import cn.it.mycontract.service.SysUserService;
 import com.baomidou.mybatisplus.mapper.EntityWrapper;
@@ -44,6 +46,10 @@ public class LoginController {
     YZMController yzmController;
 
 
+    @Autowired
+    LogLoginMapper logLoginMapper;
+
+
 
 
 
@@ -70,6 +76,9 @@ public class LoginController {
                         @RequestParam("yzm") String yzmCode,
                         Model model,
                         HttpServletRequest request){
+
+
+
         if (!yzmController.verify(yzmCode,request)){
 
             yzmController.removeCaptcha(request);
@@ -125,6 +134,18 @@ public class LoginController {
             loginCountCache.remove(account);
             loginLockCache.remove(account);
 
+
+
+            /*
+            * 登录后日志写入
+            * */
+            LogLogin logLogin = new LogLogin();
+            logLogin.setLoginTime(new Date());
+            logLogin.setLoginName(sysUser.getName());
+            logLoginMapper.insert(logLogin);
+
+
+
             return  "index";
         } catch (UnknownAccountException e) {
             e.printStackTrace();
@@ -137,6 +158,7 @@ public class LoginController {
         Integer loginCount = checkLoginCount(account);
 
         loginCount = 5 - loginCount;
+
 
 
         return "redirect:/loginPage?count=" + loginCount;

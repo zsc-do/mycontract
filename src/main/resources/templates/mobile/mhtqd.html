@@ -2,7 +2,7 @@
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>市监局合同系统</title>
+    <title>合同系统</title>
 
     <link rel="stylesheet" type="text/css" th:href="@{/css/bootstrap.min.css}"></link>
     <script type="text/javascript" th:href="@{/js/bootstrap.min.js}"></script>
@@ -33,11 +33,7 @@
         </div>
 
         <div class="list-group contract-group" >
-            <!--<a href="#" class="list-group-item active">-->
-                <!--<h4 class="list-group-item-heading">List group item heading</h4>-->
-                <!--<p class="list-group-item-text">...</p>-->
-                <!--<p class="text-right" style="color: #3c7bff">Right aligned text</p>-->
-            <!--</a>-->
+
         </div>
 
         <nav aria-label="...">
@@ -56,17 +52,31 @@
                 background-color: #b0c6bb;
             ">
         <div class="container">
-            <a th:href="@{/mobile/toHtsq}">
-                <span class="glyphicon glyphicon-pencil" aria-hidden="true" style="margin-left: 80px;margin-top: 15px;">
-                    <div style="margin-left: -20px;">合同审签</div>
-                </span>
-            </a>
 
-            <a th:href="@{/mobile/toHtqd}">
-               <span class=" glyphicon glyphicon-check" aria-hidden="true" style="margin-left: 100px;">
-                    <div style="margin-left: -20px;">合同签订</div>
-                </span>
-            </a>
+
+
+
+            <div class="row">
+                <div class="col-xs-6">
+                        <a th:href="@{/mobile/toHtsq}" style="margin:0 40%">
+                            <span class="glyphicon glyphicon-pencil" aria-hidden="true" >
+                                <div style="margin:0 -40%">合同审签</div>
+                            </span>
+                        </a>
+
+                </div>
+
+
+                <div class="col-xs-6">
+                    <a th:href="@{/mobile/toHtqd}" style="margin:0 40%">
+                       <span class=" glyphicon glyphicon-check" aria-hidden="true" >
+                            <div style="margin:0 -40%">合同签订</div>
+                        </span>
+                    </a>
+
+                </div>
+
+            </div>
 
         </div>
 
@@ -126,6 +136,12 @@
                     parea.setAttribute("class",'list-group-item-text');
                     parea.innerText = '经办单位: ' +result[i]['sponsorName'];
                     itemNode.appendChild(parea);
+
+
+                    let draftTimeP = document.createElement('p');
+                    draftTimeP.setAttribute("class",'list-group-item-text');
+                    draftTimeP.innerText = '起草时间: ' +result[i]['draftTime'];
+                    itemNode.appendChild(draftTimeP);
 
 
                     contractGroup.appendChild(itemNode);
