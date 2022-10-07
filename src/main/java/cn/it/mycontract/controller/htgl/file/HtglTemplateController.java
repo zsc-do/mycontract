@@ -88,7 +88,9 @@ public class HtglTemplateController {
 
         HtglTemplate htglTemplate = htglTemplateService.selectById(tid);
 
-        String downloadFilePath="D:\\contractUpload\\htmb";//从我们的上传文件夹中去取
+//        String downloadFilePath="D:\\contractUpload\\htmb";//从我们的上传文件夹中去取
+
+        String downloadFilePath="/opt/contractUpload/htmb";
 
         File file = new File(htglTemplate.getTemplatePath());//新建一个文件
 

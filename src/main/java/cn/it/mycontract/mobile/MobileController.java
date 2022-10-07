@@ -287,7 +287,10 @@ public class MobileController {
             houZui = file.getOriginalFilename().substring(pos);
         }
 
-        String filePath = "D:\\contractUpload\\htsmj\\"+uuid + houZui;
+//        String filePath = "D:\\contractUpload\\htsmj\\"+uuid + houZui;
+
+
+        String filePath = "/opt/contractUpload/htsmj/"+uuid + houZui;
 
         try {
             file.transferTo(new File(filePath));

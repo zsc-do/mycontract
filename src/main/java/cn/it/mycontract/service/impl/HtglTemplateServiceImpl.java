@@ -44,7 +44,9 @@ public class HtglTemplateServiceImpl extends ServiceImpl<HtglTemplateMapper, Htg
             houZui = file.getOriginalFilename().substring(pos);
         }
 
-        String filePath = "D:\\contractUpload\\htmb\\"+uuid + houZui;
+//        String filePath = "D:\\contractUpload\\htmb\\"+uuid + houZui;
+
+        String filePath = "/opt/contractUpload/htmb/"+uuid + houZui;
 
         try {
             file.transferTo(new File(filePath));

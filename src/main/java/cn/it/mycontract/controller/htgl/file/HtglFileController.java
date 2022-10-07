@@ -48,7 +48,9 @@ public class HtglFileController {
                 .eq("status","1")
                 .eq("type","1"));
 
-        String downloadFilePath="D:\\contractUpload";//从我们的上传文件夹中去取
+//        String downloadFilePath="D:\\contractUpload";//从我们的上传文件夹中去取
+
+        String downloadFilePath="/opt/contractUpload";
 
         File file = new File(htglFile.getFilePath());//新建一个文件
 
@@ -88,8 +90,9 @@ public class HtglFileController {
                 .eq("status","1")
                 .eq("type","2"));
 
-        String downloadFilePath="D:\\contractUpload";//从我们的上传文件夹中去取
+//        String downloadFilePath="D:\\contractUpload";//从我们的上传文件夹中去取
 
+        String downloadFilePath="/opt/contractUpload";
         File file = new File(htglFile.getFilePath());//新建一个文件
 
         HttpHeaders headers = new HttpHeaders();//http头信息

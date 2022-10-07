@@ -317,7 +317,9 @@ public class HtqcController {
             houZui = file.getOriginalFilename().substring(pos);
         }
 
-        String filePath = "D:\\contractUpload\\"+uuid + houZui;
+//        String filePath = "D:\\contractUpload\\"+uuid + houZui;
+
+        String filePath = "/opt/contractUpload/"+uuid + houZui;
 
         try {
             file.transferTo(new File(filePath));

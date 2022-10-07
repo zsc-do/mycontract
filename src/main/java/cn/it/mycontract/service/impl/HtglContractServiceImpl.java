@@ -184,8 +184,10 @@ public class HtglContractServiceImpl extends ServiceImpl<HtglContractMapper, Htg
             houZui = file.getOriginalFilename().substring(pos);
         }
 
-        String filePath = "D:\\contractUpload\\htzw\\"+uuid + houZui;
+//        String filePath = "D:\\contractUpload\\htzw\\"+uuid + houZui;
 
+
+        String filePath = "/opt/contractUpload/htzw/"+uuid + houZui;
         try {
             file.transferTo(new File(filePath));
         } catch (IOException e) {
